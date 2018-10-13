@@ -1,0 +1,13 @@
+.news-card .card-action{
+display:flex;
+    justify-content: space-between;
+    align-items: center;
+}
+
+.news-card .card-action .favorite-btn{
+color: red;
+}
+
+.news-card .card-action .favorite-btn:hover{
+color: lawngreen;
+}

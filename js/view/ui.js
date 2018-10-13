@@ -8,7 +8,7 @@ class UI{
     addNews(news){
         const template =`
     <div class="col s12 m6">
-      <div class="card">
+      <div class="card news-card" data-id="${news._id}">
         <div class="card-image">
           <img src="${news.urlToImage || 'img/defaltnews.jpg'}">
         </div>
@@ -18,6 +18,7 @@ class UI{
         </div>
         <div class="card-action">
           <a href="${news.url}" target="_blank">read more</a>
+          <i class="material-icons favorite-btn">favorite_border</i>
         </div>
       </div>
     </div>

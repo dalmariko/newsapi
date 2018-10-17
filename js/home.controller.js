@@ -43,7 +43,6 @@ ui.selectCountry.addEventListener('change', (e) => {
 
 
 ui.newsContainer.addEventListener('click', function (e) {
-
     if(e.target.closest('.favorite-btn')){
         const id = e.target.closest("[data-id]").dataset.id;
         favorites.save(state.news[id]);

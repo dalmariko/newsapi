@@ -5,12 +5,13 @@
     <meta name="viewport"
           content="width=device-width, user-scalable=no, initial-scale=1.0, maximum-scale=1.0, minimum-scale=1.0">
     <meta http-equiv="X-UA-Compatible" content="ie=edge">
-    <title>Document</title>
 
     <!-- Compiled and minified CSS -->
     <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/materialize/1.0.0/css/materialize.min.css">
     <link href="https://fonts.googleapis.com/icon?family=Material+Icons" rel="stylesheet">
     <link rel="stylesheet" href="css/style.css">
+
+    <title>Favorites</title>
 </head>
 <body>
 
@@ -26,28 +27,6 @@
     </div>
 </nav>
 
-<div class="container">
-    <div class="controls-wrapper card red lighten-2">
-        <div class="card-content ">
-            <div class="row">
-                <div class="col s6">
-                    <div class="input-field col s12">
-                        <select id="country">
-                            <option value="" disabled selected>Choose your option</option>
-                            <option value="us">USA</option>
-                            <option value="gb">Britan</option>
-                            <option value="ua">UKRAINE</option>
-                        </select>
-                        <label>Country</label>
-                    </div>
-                </div>
-                <div class="col s6"></div>
-            </div>
-        </div>
-    </div>
-</div>
-
-
 
 <div class="container news-container">
 
@@ -56,6 +35,7 @@
     </div>
 
 </div>
+
 
 <script src="https://cdnjs.cloudflare.com/ajax/libs/jquery/3.3.1/jquery.slim.min.js"></script>
 
@@ -68,12 +48,12 @@
     });
 </script>
 
-<script src="js/model/favorite-storage.js"></script>
-
 
 <script src="js/service/http.js"></script>
 <script src="js/view/ui.js"></script>
-<script src="js/home.controller.js"></script>
+<script src="js/model/favorite-storage.js"></script>
+<script src="js/favorites.contoller.js"></script>
+
 
 </body>
 </html>

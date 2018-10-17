@@ -1,12 +1,12 @@
 // UI user interface
-class UI{
-    constructor(){
+class UI {
+    constructor() {
         this.newsContainer = document.querySelector('.news-container .row');
         this.selectCountry = document.getElementById('country');
     }
 
-    addNews(news){
-        const template =`
+    addNews(news) {
+        const template = `
     <div class="col s12 m6">
       <div class="card news-card" data-id="${news._id}">
         <div class="card-image">
@@ -25,9 +25,10 @@ class UI{
     </div>
             
 `;
-        this.newsContainer.insertAdjacentHTML('afterbegin',template);
+        this.newsContainer.insertAdjacentHTML('afterbegin', template);
     }
-    clearContainer(){
-        this.newsContainer.innerHTML='';
+
+    clearContainer() {
+        this.newsContainer.innerHTML = '';
     }
 }

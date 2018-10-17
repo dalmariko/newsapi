@@ -17,8 +17,9 @@ class UI{
           <p>${news.description || ''}</p>
         </div>
         <div class="card-action">
-          <a href="${news.url}" target="_blank">read more</a>
+          <a href="${news.url}" target="_blank"><i class="material-icons open-btn">open_with</i></a>
           <i class="material-icons favorite-btn">favorite_border</i>
+          <i class="material-icons remove-btn">not_interested</i>
         </div>
       </div>
     </div>

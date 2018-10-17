@@ -7,6 +7,7 @@ const config = {
 const state = {
     news:[]
 };
+
 const http = new Http();
 const ui = new UI();
 const favorites = new Favorites();
@@ -15,7 +16,6 @@ url = `${config.api_url}/top-headlines?country=ua&apiKey=${config.api_key}`;
 
 
 http.get(url, (res) => {
-
     res.articles.forEach((news,i) => {news._id=i});
     state.news = res.articles;
     res.articles.forEach((news) => {ui.addNews(news)});
@@ -27,6 +27,7 @@ ui.selectCountry.addEventListener('change', (e) => {
     http.get(getQuery, (res) => {
             ui.clearContainer();
         res.articles.forEach((news,i) => news._id = i);
+
         state.news = res.articles;
         res.articles.forEach((news) => {ui.addNews(news)});
         });
@@ -45,11 +46,16 @@ ui.newsContainer.addEventListener('click', function (e) {
 
     if(e.target.closest('.favorite-btn')){
         const id = e.target.closest("[data-id]").dataset.id;
-        favorites.save(state.news.id);
+        favorites.save(state.news[id]);
     }
 });
 
 
+
+//НОВОЕ ДЗ
+// TODO в файле http.js заменить с xhr на fetch и promise
+// TODO Переписать все запросы в файле home.controller с использованием промисов и then
+// TODO Переписать на промисы домашнее задание по ajax с пользователями которое
 
 
 

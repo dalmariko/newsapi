@@ -15,13 +15,29 @@
 </head>
 <body>
 
+<ul class="sidenav collapsible" id="mobile-redpress">
+    <li><a href="index.html">Home</a></li>
+    <li><a href="favorites.html">Favorites</a></li>
+    <li>
+        <div>
+            <a href="#" class="btn-floating waves-effect waves-light red btn-small">
+                <i class="material-icons Small ">clear</i>
+            </a>
+        </div>
+
+    </li>
+</ul>
+
 <nav>
     <div class="container">
         <div class="nav-wrapper">
-            <a href="index.html" class="brand-logo">NEWS</a>
-            <ul id="nav-mobile" class="right hide-on-med-and-down">
+            <a href="index.html" class="brand-logo">RedPress</a>
+            <a href="#" data-target="mobile-redpress" class="sidenav-trigger"><i class="material-icons">menu</i></a>
+            <ul class="right hide-on-med-and-down">
                 <li><a href="index.html">Home</a></li>
                 <li><a href="favorites.html">Favorites</a></li>
+                <li><a class="btn-floating btn-small waves-effect waves-light red"><i
+                        class="material-icons Small">clear</i></a></li>
             </ul>
         </div>
     </div>
@@ -37,15 +53,11 @@
 </div>
 
 
-<script src="https://cdnjs.cloudflare.com/ajax/libs/jquery/3.3.1/jquery.slim.min.js"></script>
-
 <!-- Compiled and minified JavaScript -->
 <script src="https://cdnjs.cloudflare.com/ajax/libs/materialize/1.0.0/js/materialize.min.js"></script>
 
 <script>
-    $(document).ready(function(){
-        $('select').formSelect();
-    });
+    M.AutoInit();
 </script>
 
 

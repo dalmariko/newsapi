@@ -26,20 +26,23 @@ http.get(url, (res) => {
 });
 
 
+ui.selectCountry.addEventListener('click', (e) => {
+    let countys = document.getElementById('countrys');
+    countys.addEventListener('click', (e) => {
+        let country = e.target.dataset.country;
+        const http = new Http();
+        const getQuery = `${config.api_url}/top-headlines?country=${country}&apiKey=${config.api_key}`;
+        http.get(getQuery, (res) => {
 
-ui.selectCountry.addEventListener('change', (e) => {
-    const http = new Http();
-    const getQuery = `${config.api_url}/top-headlines?country=${ui.selectCountry.value}&apiKey=${config.api_key}`;
-    http.get(getQuery, (res) => {
+            ui.clearContainer();
+            res.articles.forEach((news, i) => news._id = i);
 
-        ui.clearContainer();
-        res.articles.forEach((news, i) => news._id = i);
+            state.news = res.articles;
+            res.articles.forEach((news) => {
+                ui.addNews(news)
+            });
 
-        state.news = res.articles;
-        res.articles.forEach((news) => {
-            ui.addNews(news)
         });
-
     });
 });
 

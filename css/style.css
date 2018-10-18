@@ -27,3 +27,8 @@
 .news-card .card-action .open-btn:hover {
     color: rgb(255, 57, 204);
 }
+
+.paginate-box{
+    display: flex;
+    justify-content: center;
+}

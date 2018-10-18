@@ -11,6 +11,9 @@ const state = {
 const http = new Http();
 const ui = new UI();
 const favorites = new Favorites();
+let country;
+let category;
+
 
 url = `${config.api_url}/top-headlines?country=ua&apiKey=${config.api_key}`;
 
@@ -27,11 +30,33 @@ http.get(url, (res) => {
 
 
 ui.selectCountry.addEventListener('click', (e) => {
-    let countys = document.getElementById('countrys');
-    countys.addEventListener('click', (e) => {
-        let country = e.target.dataset.country;
+    let countrys = document.getElementById('countrys');
+    countrys.addEventListener('click', (e) => {
+        country = e.target.dataset.country;
         const http = new Http();
         const getQuery = `${config.api_url}/top-headlines?country=${country}&apiKey=${config.api_key}`;
+        http.get(getQuery, (res) => {
+
+            ui.clearContainer();
+            res.articles.forEach((news, i) => news._id = i);
+
+            state.news = res.articles;
+            res.articles.forEach((news) => {
+                ui.addNews(news)
+            });
+
+        });
+    });
+});
+
+ui.selectCategorys.addEventListener('click', (e) => {
+    let categorys = document.getElementById('categorys');
+    categorys.addEventListener('click', (e) => {
+
+        category = e.target.dataset.category;
+
+        const http = new Http();
+        const getQuery = `${config.api_url}/top-headlines?country=${country}&category=${category}&apiKey=${config.api_key}`;
         http.get(getQuery, (res) => {
 
             ui.clearContainer();

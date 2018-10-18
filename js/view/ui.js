@@ -2,7 +2,8 @@
 class UI {
     constructor() {
         this.newsContainer = document.querySelector('.news-container .row');
-        this.selectCountry = document.querySelector('.selectedMenu');
+        this.selectCountry = document.querySelector('.selectedCountrys');
+        this.selectCategorys = document.querySelector('.selectedCategorys');
     }
 
     addNews(news) {

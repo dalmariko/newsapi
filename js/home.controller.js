@@ -73,7 +73,6 @@ ui.selectCategorys.addEventListener('click', (e) => {
 
 
 
-// todo 5. удаление из favorites из потом удалить localStorage все новости.
 
 
 ui.newsContainer.addEventListener('click', function (e) {

@@ -29,3 +29,10 @@ ui.newsContainer.addEventListener('click', function (e) {
 
     }
 });
+
+document.querySelector('nav').addEventListener('click',(e)=>{
+    if(e.target.closest('.clearAllButon')){
+        favorites.cleanAll();
+        ui.clearContainer();
+    }
+});

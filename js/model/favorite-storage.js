@@ -20,4 +20,8 @@ class Favorites {
         localStorage.removeItem('favorites_news');
     }
 
+    cleanAll(){
+        localStorage.clear('favorites_news');
+    }
+
 }

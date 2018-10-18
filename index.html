@@ -14,39 +14,73 @@
 </head>
 <body>
 
+
+<!-- Dropdown Structure -->
+<ul id="countrys" class="dropdown-content">
+    <li><a href="#!" data-country="ua">ukraine</a></li>
+    <li><a href="#!" data-country="us">usa</a></li>
+    <li><a href="#!" data-country="gb">britaine</a></li>
+</ul>
+
+<!-- Dropdown Structure -->
+<ul id="categorys" class="dropdown-content">
+    <li ><a href="#!" data-categorys="ua">business</a></li>
+    <li ><a href="#!" data-categorys="us">entertainment</a></li>
+    <li ><a href="#!" data-categorys="gb">general</a></li>
+    <li ><a href="#!" data-categorys="gb">health</a></li>
+    <li ><a href="#!" data-categorys="gb">science</a></li>
+    <li ><a href="#!" data-categorys="gb">technology</a></li>
+</ul>
+
+<ul class="sidenav collapsible" id="mobile-redpress">
+    <li><a href="index.html">Home</a></li>
+    <li><a href="favorites.html">Favorites</a></li>
+    <li class="no-padding">
+        <ul class="collapsible collapsible-accordion">
+            <li >
+                <a class="collapsible-header">Country`s<i class="material-icons left">my_location</i></a>
+                <div class="collapsible-body">
+                    <ul>
+                        <li ><a href="#!" data-country="ua">ukraine</a></li>
+                        <li ><a href="#!" data-country="us">usa</a></li>
+                        <li ><a href="#!" data-country="gb">britaine</a></li>
+                    </ul>
+                </div>
+            </li>
+            <li>
+                <a class="collapsible-header">Category`s<i class="material-icons left">dashboard</i></a>
+                <div class="collapsible-body">
+                    <ul>
+                        <li ><a href="#!" data-country="ua">business</a></li>
+                        <li ><a href="#!" data-country="us">entertainment</a></li>
+                        <li ><a href="#!" data-country="gb">general</a></li>
+                        <li ><a href="#!" data-country="gb">health</a></li>
+                        <li ><a href="#!" data-country="gb">science</a></li>
+                        <li ><a href="#!" data-country="gb">technology</a></li>
+                    </ul>
+                </div>
+            </li>
+        </ul>
+    </li>
+</ul>
+
 <nav>
     <div class="container">
         <div class="nav-wrapper">
-            <a href="index.html" class="brand-logo">NEWS</a>
-            <ul id="nav-mobile" class="right hide-on-med-and-down">
+            <a href="#!" class="brand-logo">RedPress</a>
+            <a href="#" data-target="mobile-redpress" class="sidenav-trigger"><i class="material-icons">menu</i></a>
+            <ul class="right hide-on-med-and-down">
                 <li><a href="index.html">Home</a></li>
                 <li><a href="favorites.html">Favorites</a></li>
+                <!-- Dropdown Trigger -->
+                <li><a class="dropdown-trigger" href="#!" data-target="countrys"><i class="material-icons right">my_location</i></a>
+                </li>
+                <li><a class="dropdown-trigger" href="#!" data-target="categorys"><i class="material-icons right">dashboard</i></a>
+                </li>
             </ul>
         </div>
     </div>
 </nav>
-
-<div class="container">
-    <div class="controls-wrapper card red lighten-2">
-        <div class="card-content ">
-            <div class="row">
-                <div class="col s6">
-                    <div class="input-field col s12">
-                        <select id="country">
-                            <option value="" disabled selected>Choose your option</option>
-                            <option value="us">USA</option>
-                            <option value="gb">Britan</option>
-                            <option value="ua">UKRAINE</option>
-                        </select>
-                        <label>Country</label>
-                    </div>
-                </div>
-                <div class="col s6"></div>
-            </div>
-        </div>
-    </div>
-</div>
-
 
 
 <div class="container news-container">
@@ -57,15 +91,12 @@
 
 </div>
 
-<script src="https://cdnjs.cloudflare.com/ajax/libs/jquery/3.3.1/jquery.slim.min.js"></script>
 
 <!-- Compiled and minified JavaScript -->
 <script src="https://cdnjs.cloudflare.com/ajax/libs/materialize/1.0.0/js/materialize.min.js"></script>
 
 <script>
-    $(document).ready(function(){
-        $('select').formSelect();
-    });
+    M.AutoInit();
 </script>
 
 <script src="js/model/favorite-storage.js"></script>

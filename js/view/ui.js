@@ -7,8 +7,9 @@ class UI {
 
     addNews(news) {
         const template = `
+
     <div class="col s12 m6">
-      <div class="card news-card" data-id="${news._id}">
+      <div class="card large news-card" data-id="${news._id}">
         <div class="card-image">
           <img src="${news.urlToImage || 'img/defaltnews.jpg'}">
         </div>
@@ -23,7 +24,7 @@ class UI {
         </div>
       </div>
     </div>
-            
+           
 `;
         this.newsContainer.insertAdjacentHTML('afterbegin', template);
     }

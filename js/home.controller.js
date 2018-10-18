@@ -25,6 +25,8 @@ http.get(url, (res) => {
     });
 });
 
+
+
 ui.selectCountry.addEventListener('change', (e) => {
     const http = new Http();
     const getQuery = `${config.api_url}/top-headlines?country=${ui.selectCountry.value}&apiKey=${config.api_key}`;

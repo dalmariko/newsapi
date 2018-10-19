@@ -8,18 +8,16 @@ const state = {
     news: []
 };
 
-const http = new Http();
+const http = new Fetch();
 const ui = new UI();
 const favorites = new Favorites();
 let country = 'ua';
 let category = 'general';
+let query = `${config.api_url}/top-headlines?country=${country}&apiKey=${config.api_key}`;
 
 
-
-url = `${config.api_url}/top-headlines?country=${country}&apiKey=${config.api_key}`;
-
-
-http.get(url, (res) => {
+http.get(query)
+    .then((res) => {
     res.articles.forEach((news, i) => {
         news._id = i
     });
@@ -29,14 +27,14 @@ http.get(url, (res) => {
     });
 });
 
-
-ui.selectCountry.addEventListener('click', (e) => {
+ui.selectCountry.addEventListener('click', e => {
     let countrys = document.getElementById('countrys');
     countrys.addEventListener('click', (e) => {
         country = e.target.dataset.country;
-        const http = new Http();
         const getQuery = `${config.api_url}/top-headlines?country=${country}&apiKey=${config.api_key}`;
-        http.get(getQuery, (res) => {
+        const http = new Fetch();
+        http.get(getQuery)
+            .then( res => {
 
             ui.clearContainer();
             res.articles.forEach((news, i) => news._id = i);
@@ -50,15 +48,16 @@ ui.selectCountry.addEventListener('click', (e) => {
     });
 });
 
-ui.selectCategorys.addEventListener('click', (e) => {
+ui.selectCategorys.addEventListener('click', e => {
     let categorys = document.getElementById('categorys');
-    categorys.addEventListener('click', (e) => {
+    categorys.addEventListener('click', e => {
 
         category = e.target.dataset.category;
 
-        const http = new Http();
         const getQuery = `${config.api_url}/top-headlines?country=${country}&category=${category}&apiKey=${config.api_key}`;
-        http.get(getQuery, (res) => {
+        const http = new Fetch();
+        http.get(getQuery)
+            .then( res => {
 
             ui.clearContainer();
             res.articles.forEach((news, i) => news._id = i);
@@ -68,21 +67,20 @@ ui.selectCategorys.addEventListener('click', (e) => {
                 ui.addNews(news)
             });
 
-        });
+        })
+
     });
 });
 
-
-ui.newsContainer.addEventListener('click', function (e) {
+ui.newsContainer.addEventListener('click', e => {
     if (e.target.closest('.favorite-btn')) {
         const id = e.target.closest("[data-id]").dataset.id;
         favorites.save(state.news[id]);
     }
 });
 
+
 //НОВОЕ ДЗ
-// TODO в файле http.js заменить с xhr на fetch и promise
-// TODO Переписать все запросы в файле home.controller с использованием промисов и then
 // TODO Переписать на промисы домашнее задание по ajax с пользователями которое
 
 

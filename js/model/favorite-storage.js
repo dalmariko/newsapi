@@ -1,5 +1,7 @@
 class Favorites {
-
+constructor(){
+    this.menu = document.querySelector('nav');
+}
     save(news) {
         let favoritesNews = JSON.parse(localStorage.getItem('favorites_news')) || [];
         favoritesNews.push(news);

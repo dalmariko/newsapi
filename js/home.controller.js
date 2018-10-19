@@ -11,11 +11,12 @@ const state = {
 const http = new Http();
 const ui = new UI();
 const favorites = new Favorites();
-let country;
-let category;
+let country = 'ua';
+let category = 'general';
 
 
-url = `${config.api_url}/top-headlines?country=ua&apiKey=${config.api_key}`;
+
+url = `${config.api_url}/top-headlines?country=${country}&apiKey=${config.api_key}`;
 
 
 http.get(url, (res) => {
@@ -70,9 +71,6 @@ ui.selectCategorys.addEventListener('click', (e) => {
         });
     });
 });
-
-
-
 
 
 ui.newsContainer.addEventListener('click', function (e) {

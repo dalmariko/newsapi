@@ -28,7 +28,7 @@
     color: rgb(255, 57, 204);
 }
 
-.paginate-box{
+.paginateBox{
     display: flex;
     justify-content: center;
 }

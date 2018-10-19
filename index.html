@@ -16,20 +16,20 @@
 
 
 <!-- Dropdown Structure -->
-<ul id="countrys" class="dropdown-content">
-    <li><a href="#!" data-country="ua">ukraine</a></li>
-    <li><a href="#!" data-country="us">usa</a></li>
-    <li><a href="#!" data-country="gb">britaine</a></li>
+<ul id="countrys" class="dropdown-content selectedCountrys">
+    <li><a  data-country="ua">ukraine</a></li>
+    <li><a  data-country="us">usa</a></li>
+    <li><a  data-country="gb">britaine</a></li>
 </ul>
 
 <!-- Dropdown Structure -->
-<ul id="categorys" class="dropdown-content">
-    <li><a href="#!" data-category="business">business</a></li>
-    <li><a href="#!" data-category="entertainment">entertainment</a></li>
-    <li><a href="#!" data-category="general">general</a></li>
-    <li><a href="#!" data-category="health">health</a></li>
-    <li><a href="#!" data-category="science">science</a></li>
-    <li><a href="#!" data-category="technology">technology</a></li>
+<ul id="categorys" class="dropdown-content selectedCategorys">
+    <li><a  data-category="business">business</a></li>
+    <li><a  data-category="entertainment">entertainment</a></li>
+    <li><a  data-category="general">general</a></li>
+    <li><a  data-category="health">health</a></li>
+    <li><a  data-category="science">science</a></li>
+    <li><a  data-category="technology">technology</a></li>
 </ul>
 
 
@@ -40,25 +40,25 @@
     <li class="no-padding">
         <ul class="collapsible collapsible-accordion">
             <li>
-                <a class="collapsible-header">Country`s<i class="material-icons left">my_location</i></a>
+                <a class="collapsible-header ">Country`s<i class="material-icons left">my_location</i></a>
                 <div class="collapsible-body">
                     <ul>
-                        <li><a href="#!" data-country="ua">ukraine</a></li>
-                        <li><a href="#!" data-country="us">usa</a></li>
-                        <li><a href="#!" data-country="gb">britaine</a></li>
+                        <li><a  data-country="ua">ukraine</a></li>
+                        <li><a  data-country="us">usa</a></li>
+                        <li><a  data-country="gb">britaine</a></li>
                     </ul>
                 </div>
             </li>
             <li>
-                <a class="collapsible-header">Category`s<i class="material-icons left">dashboard</i></a>
+                <a class="collapsible-header ">Category`s<i class="material-icons left">dashboard</i></a>
                 <div class="collapsible-body">
                     <ul>
-                        <li><a href="#!" data-category="business">business</a></li>
-                        <li><a href="#!" data-category="entertainment">entertainment</a></li>
-                        <li><a href="#!" data-category="general">general</a></li>
-                        <li><a href="#!" data-category="health">health</a></li>
-                        <li><a href="#!" data-category="science">science</a></li>
-                        <li><a href="#!" data-category="technology">technology</a></li>
+                        <li><a  data-category="business">business</a></li>
+                        <li><a  data-category="entertainment">entertainment</a></li>
+                        <li><a  data-category="general">general</a></li>
+                        <li><a  data-category="health">health</a></li>
+                        <li><a  data-category="science">science</a></li>
+                        <li><a  data-category="technology">technology</a></li>
                     </ul>
                 </div>
             </li>
@@ -69,24 +69,27 @@
 <nav>
     <div class="container">
         <div class="nav-wrapper">
-            <a href="#!" class="brand-logo">RedPress</a>
+            <a href="index.html" class="brand-logo">RedPress</a>
             <a href="#" data-target="mobile-redpress" class="sidenav-trigger"><i class="material-icons">menu</i></a>
             <ul class="right hide-on-med-and-down">
 
                 <li><a href="index.html">Home</a></li>
                 <li><a href="favorites.html">Favorites</a></li>
                 <!-- Dropdown Trigger -->
-                <li><a class="dropdown-trigger selectedCountrys" href="#!" data-target="countrys"><i class="material-icons right">my_location</i></a></li>
+                <li><a class="dropdown-trigger selectedCountrys"  data-target="countrys"><i class="material-icons right">my_location</i></a></li>
 
-                <li><a class="dropdown-trigger selectedCategorys" href="#!" data-target="categorys"><i class="material-icons right">dashboard</i></a></li>
+                <li><a class="dropdown-trigger selectedCategorys"  data-target="categorys"><i class="material-icons right">dashboard</i></a></li>
 
             </ul>
         </div>
     </div>
 </nav>
 
+<div class="get-topbtn">
+    <a  class="btn-floating upbtn btn waves-effect waves-light red"><i class="material-icons medium">airplanemode_active</i></a>
+</div>
 
-<div class="container news-container">
+<div class="container news-container" >
 
     <div class="row">
 

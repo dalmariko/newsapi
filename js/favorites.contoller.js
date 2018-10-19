@@ -31,6 +31,7 @@ ui.newsContainer.addEventListener('click', function (e) {
 });
 
 favorites.menu.addEventListener('click',(e)=>{
+    console.log('click');
     if(e.target.closest('.clearAllButon')){
         favorites.cleanAll();
         ui.clearContainer();

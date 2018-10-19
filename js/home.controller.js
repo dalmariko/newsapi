@@ -80,8 +80,6 @@ ui.newsContainer.addEventListener('click', e => {
 });
 
 
-//НОВОЕ ДЗ
-// TODO Переписать на промисы домашнее задание по ajax с пользователями которое
 
 
 

@@ -4,29 +4,89 @@ const config = {
 
 };
 
+
+function removeDuplicates(oriAr, fild) {
+    let newArray = [];
+    let lookupObject  = {};
+
+    for(let i in oriAr) {
+        lookupObject[oriAr[i][fild]] = oriAr[i];
+    }
+
+    for(i in lookupObject) {
+        newArray.push(lookupObject[i]);
+    }
+    return newArray;
+}
+
+
 const state = {
     news: []
 };
 
 const http = new Fetch();
-const savenews = new DBFirebase();
+const base = new DBFirebase();
 
 let country = 'ua';
 let category = 'general';
 let query = `${config.api_url}/top-headlines?country=${country}&apiKey=${config.api_key}`;
 
-//todo брать новости из базы. проверять их на наличие нового документа,если всё пусто то
-//todo заносить результат первого промиса.перый промис это брать из базы
-http.get(query)
-    .then((res) => {
-        res.articles.forEach(news => {
-            news.id = Date.now();
-           savenews.getLimitNuwses().forEach(getnews =>{
-               // savenews.save(news);
-               console.log(getnews);
-           });
+const promis = new Promise((resolve,reject)=>{
+   state.news = removeDuplicates(state.news,'title')
+   return resolve(state.news);
+});
 
 
+base.getDBNews()
+    .then(querySnapshot => {querySnapshot.forEach(baseNews => {baseNews.data().forEach(news=>{ui.addNews(news);})});});
+
+// setTimeout(() => {
+
+    base.getDBNews()
+        .then(querySnapshot => {
+            querySnapshot.forEach(baseNews => {
+                state.news.push(baseNews.data());
+            });
         });
-    })
-.catch(err=>console.log(err));
+
+    http.getAPINews(query)
+        .then(res => {
+            res.articles.forEach(apiNews => {
+                state.news.push(apiNews);
+            });
+        });
+
+
+    promis
+        .then(rez =>console.log(rez));
+        // .then(pullrequestNewses => {
+        //     pullrequestNewses.forEach(oneFreshnews=>{
+        //         base.saveDBNews(oneFreshnews);
+        //     })
+        // });
+
+// }, 1000);
+
+
+
+
+
+
+
+
+
+
+
+// http.get(query)
+//     .then((res) => {
+//         res.articles.forEach(news => {
+//             news.id = Date.now();
+//            savenews.getLimitNuwses().forEach(getnews =>{
+//                // savenews.save(news);
+//                console.log(getnews);
+//            });
+//
+//
+//         });
+//     })
+// .catch(err=>console.log(err));

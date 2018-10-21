@@ -1,10 +1,10 @@
 class DBFirebase{
-    save(newsesData){
-        return db.collection('allgetNews').add(newsesData);
+    saveDBNews(newsesData){
+        return db.collection('dbnewses').add(newsesData);
     }
 
-    getLimitNuwses(){
-      return db.collection('allgetNews').get();
+    getDBNews(){
+      return db.collection('dbnewses').get();
     }
 
 

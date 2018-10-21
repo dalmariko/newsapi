@@ -1,6 +1,9 @@
 
 const ui = new UI();
 
+
+
+
 ui.selectCountry.addEventListener('click', e => {
 
     let countrys = document.getElementById('countrys');
@@ -9,7 +12,7 @@ ui.selectCountry.addEventListener('click', e => {
         country = e.target.dataset.country;
         const getQuery = `${config.api_url}/top-headlines?country=${country}&apiKey=${config.api_key}`;
         const http = new Fetch();
-        http.get(getQuery)
+        http.getAPINews(getQuery)
             .then( res => {
 
             ui.clearContainer();
@@ -32,7 +35,7 @@ ui.selectCategorys.addEventListener('click', e => {
 
         const getQuery = `${config.api_url}/top-headlines?country=${country}&category=${category}&apiKey=${config.api_key}`;
         const http = new Fetch();
-        http.get(getQuery)
+        http.getAPINews(getQuery)
             .then( res => {
 
             ui.clearContainer();

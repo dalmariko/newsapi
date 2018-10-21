@@ -16,7 +16,7 @@ class Http {
 }
 
 class Fetch{
-    get(url){
+    getAPINews(url){
         return new Promise((resolve,reject)=>{
             fetch(url)
                 .then(response => response.json())

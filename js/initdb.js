@@ -1,10 +1,10 @@
 const firebaseConfig = {
-    apiKey: "AIzaSyCZx5hkr8uDlquO2rEKmlQa0mvHzHk6ssQ",
-    authDomain: "project17-10-2018.firebaseapp.com",
-    databaseURL: "https://project17-10-2018.firebaseio.com",
-    projectId: "project17-10-2018",
-    storageBucket: "project17-10-2018.appspot.com",
-    messagingSenderId: "1096598129525"
+    apiKey: "AIzaSyD6N_N0FHIcTyiN-6bCubaZ8d9H-OUHG6c",
+    authDomain: "redpress-b2935.firebaseapp.com",
+    databaseURL: "https://redpress-b2935.firebaseio.com",
+    projectId: "redpress-b2935",
+    storageBucket: "redpress-b2935.appspot.com",
+    messagingSenderId: "502141343996"
 };
 firebase.initializeApp(firebaseConfig);
 const db = firebase.firestore();

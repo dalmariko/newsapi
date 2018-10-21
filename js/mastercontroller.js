@@ -7,13 +7,13 @@ const config = {
 
 function removeDuplicates(oriAr, fild) {
     let newArray = [];
-    let lookupObject  = {};
+    let lookupObject = {};
 
-    for(let i in oriAr) {
+    for (let i in oriAr) {
         lookupObject[oriAr[i][fild]] = oriAr[i];
     }
 
-    for(i in lookupObject) {
+    for (i in lookupObject) {
         newArray.push(lookupObject[i]);
     }
     return newArray;
@@ -32,56 +32,43 @@ let category = 'general';
 let query = `${config.api_url}/top-headlines?country=${country}&apiKey=${config.api_key}`;
 
 base.getDBNews()
-    .then(querySnapshot => {querySnapshot.forEach(baseNews => {baseNews.data().forEach(news=>{ui.addNews(news);})});});
+    .then(querySnapshot => {
+        querySnapshot.forEach(baseNews => {
+            baseNews.data().forEach(news => {
+                ui.addNews(news);
+            })
+        });
+    });
 
 // setTimeout(() => {
 
 
+base.getDBNews()
+    .then(querySnapshot => {
+        querySnapshot.forEach(baseNews => {
+            state.news.push(baseNews.data());
+        });
+    });
 
-
-
-const promis = new Promise((resolve,reject)=>{
-resolve(
-    base.getDBNews()
-        .then(querySnapshot => {
-            querySnapshot.forEach(baseNews => {
-                state.news.push(baseNews.data());
-            });
-        })
-    )
-    resolve(
-        http.getAPINews(query)
-        .then(res => {
-            res.articles.forEach(apiNews => {
-                state.news.push(apiNews);
-            });
-        })
-    )
-    
-});
-
+http.getAPINews(query)
+    .then(res => {
+        res.articles.forEach(apiNews => {
+            state.news.push(apiNews);
+        });
+    });
 
 
 promis
-        .then(rez => console.log(rez))
-        // .then(pullrequestNewses => {
-        //     pullrequestNewses.forEach(oneFreshnews=>{
-        //         console.log(oneFreshnews);
-        //         // base.saveDBNews(oneFreshnews);
-        //     })
-        // })
-        .catch(err => console.log(err));
+    .then(rez => console.log(rez))
+    // .then(pullrequestNewses => {
+    //     pullrequestNewses.forEach(oneFreshnews=>{
+    //         console.log(oneFreshnews);
+    //         // base.saveDBNews(oneFreshnews);
+    //     })
+    // })
+    .catch(err => console.log(err));
 
 // }, 1000);
-
-
-
-
-
-
-
-
-
 
 
 // http.get(query)

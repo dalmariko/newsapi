@@ -4,7 +4,6 @@ const config = {
 
 };
 
-
 function removeDuplicates(oriAr, fild) {
     let newArray = [];
     let lookupObject = {};
@@ -19,9 +18,14 @@ function removeDuplicates(oriAr, fild) {
     return newArray;
 }
 
-
 const state = {
     news: []
+};
+const tempBase={
+    news:[]
+};
+const tempAPI={
+    news:[]
 };
 
 const http = new Fetch();
@@ -31,42 +35,23 @@ let country = 'ua';
 let category = 'general';
 let query = `${config.api_url}/top-headlines?country=${country}&apiKey=${config.api_key}`;
 
-base.getDBNews()
-    .then(querySnapshot => {
-        querySnapshot.forEach(baseNews => {
-            baseNews.data().forEach(news => {
-                ui.addNews(news);
-            })
-        });
-    });
 
 // setTimeout(() => {
 
-
 base.getDBNews()
     .then(querySnapshot => {
         querySnapshot.forEach(baseNews => {
-            state.news.push(baseNews.data());
+            tempBase.news.push(baseNews.data());
         });
     });
 
 http.getAPINews(query)
     .then(res => {
         res.articles.forEach(apiNews => {
-            state.news.push(apiNews);
+            tempAPI.news.push(apiNews);
         });
     });
 
-
-promis
-    .then(rez => console.log(rez))
-    // .then(pullrequestNewses => {
-    //     pullrequestNewses.forEach(oneFreshnews=>{
-    //         console.log(oneFreshnews);
-    //         // base.saveDBNews(oneFreshnews);
-    //     })
-    // })
-    .catch(err => console.log(err));
 
 // }, 1000);
 

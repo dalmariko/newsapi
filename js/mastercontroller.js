@@ -31,39 +31,46 @@ let country = 'ua';
 let category = 'general';
 let query = `${config.api_url}/top-headlines?country=${country}&apiKey=${config.api_key}`;
 
-const promis = new Promise((resolve,reject)=>{
-   state.news = removeDuplicates(state.news,'title')
-   return resolve(state.news);
-});
-
-
 base.getDBNews()
     .then(querySnapshot => {querySnapshot.forEach(baseNews => {baseNews.data().forEach(news=>{ui.addNews(news);})});});
 
 // setTimeout(() => {
 
+
+
+
+
+const promis = new Promise((resolve,reject)=>{
+resolve(
     base.getDBNews()
         .then(querySnapshot => {
             querySnapshot.forEach(baseNews => {
                 state.news.push(baseNews.data());
             });
-        });
-
-    http.getAPINews(query)
+        })
+    )
+    resolve(
+        http.getAPINews(query)
         .then(res => {
             res.articles.forEach(apiNews => {
                 state.news.push(apiNews);
             });
-        });
+        })
+    )
+    
+});
 
 
-    promis
-        .then(rez =>console.log(rez));
+
+promis
+        .then(rez => console.log(rez))
         // .then(pullrequestNewses => {
         //     pullrequestNewses.forEach(oneFreshnews=>{
-        //         base.saveDBNews(oneFreshnews);
+        //         console.log(oneFreshnews);
+        //         // base.saveDBNews(oneFreshnews);
         //     })
-        // });
+        // })
+        .catch(err => console.log(err));
 
 // }, 1000);
 

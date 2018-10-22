@@ -5,30 +5,54 @@ const config = {
 };
 
 
-const remuvDuplicate = function (arr, field) {
-    arr.forEach(item => {
+function removeDuplicates(arr, fild) {
+    let obj = {};
 
-    });
-    return
-};
+    for (let item in arr) {
+        let str = arr[item][fild];
+        obj[str] = true;
+    }
+    return Object.keys(obj);
+}
 
 
 let arr = [
-    {name: 'dima'},
-    {name: 'anna'},
-    {name: 'dima'},
-    {name: 'dima'},
+    {'title':'asdasd'},
+    {'title':'asdasd'},
+    {'title':'asdasd'},
+    {'title':'asdasd'},
+    {'title':'asdasd'},
+    {'title':'asdasd'},
+    {'title':'asdasd'},
+    {'title':'cvxs'},
+    {'title':'cvxs'},
+    {'title':'cvxs'},
+    {'title':'cvxs'},
+    {'title':'cvxs'},
+    {'title':'cvxs'},
+    {'title':'cvxs'},
+    {'title':'fsdf'},
+    {'title':'cvxcfxcvxcvxcv'},
+    {'title':'cvxcfxcvxcvxcv'},
+    {'title':'cvxcfxcvxcvxcv'},
+    {'title':'cvxcfxcvxcvxcv'},
+    {'title':'cvxcfxcvxcvxcv'},
+    {'title':'czxczx'},
+    {'title':'cvxs'},
+    {'title':'asdasd'},
+    {'title':'qczxczx'},
+    {'title':'qczxczx'},
+    {'title':'qczxczx'},
+    {'title':'qczxczx'},
+    {'title':'qczxczx'},
+    {'title':'qczxczx'},
+    {'title':'czxczx'},
+    {'title':'czxczx'},
+    {'title':'czxczx'},
+    {'title':'czxczx'},
 ];
-console.log(remuvDuplicate(arr));
 
-
-
-
-
-
-
-
-
+console.log(removeDuplicates(arr,'title'));
 
 
 
@@ -54,25 +78,29 @@ let query = `${config.api_url}/top-headlines?country=${country}&apiKey=${config.
 
 // setTimeout(() => {
 
-base.getDBNews()
-    .then(querySnapshot => {
-        querySnapshot.forEach(baseNews => {
-            tempBase.news.push(baseNews.data());
+    base.getDBNews()
+        .then(querySnapshot => {
+            querySnapshot.forEach(baseNews => {
+                tempBase.news.push(baseNews.data());
+            });
         });
-    });
 
-http.getAPINews(query)
-    .then(res => {
-        res.articles.forEach(apiNews => {
-            tempAPI.news.push(apiNews);
+    http.getAPINews(query)
+        .then(res => {
+            res.articles.forEach(apiNews => {
+                tempAPI.news.push(apiNews);
+            });
         });
-    });
 
 state.news = Object.assign(tempAPI, tempBase);
-*/
-// console.log(remuvDuplicate(state.news));
 
-// }, 1000);
+*/
+
+// removeDuplicates(state.news,'title');
+// console.log(removeDuplicates(state.news,'title'));
+
+// }, 5000);
+
 
 
 // http.get(query)

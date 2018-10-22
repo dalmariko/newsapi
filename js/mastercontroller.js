@@ -12,75 +12,119 @@ class PromisArr {
         })
     }
 }
+/*
+ function rmD(originalArray, prop) {
+ var newArr = {news:[]};
+ var lookupObject  = {};
 
-function rmD(originalArray, prop) {
-    var newArr = [];
+ for(var i in originalArray) {
+ lookupObject[originalArray[i][prop]] = originalArray[i];
+ }
+
+ for(i in lookupObject) {
+ newArr.news.push(lookupObject[i]);
+ }
+ return newArr;
+ }*/
+
+
+const remDupl = function (arr, fild) {
+    var rez = {news:[]};
     var lookupObject  = {};
 
-    for(var i in originalArray) {
-        lookupObject[originalArray[i][prop]] = originalArray[i];
+    for(var i in arr) {
+        lookupObject[arr[i][fild]] = arr[i];
     }
 
-    for(i in lookupObject) {
-        newArr.push(lookupObject[i]);
+    for( i in lookupObject) {
+        rez.news.push(lookupObject[i]);
     }
-    return newArr;
-}
-
-
-const state = {
-    news: []
+    return rez;
 };
 
-const tempBase = {
-    news: []
+/*
+let arr={
+    news : [
+        {'title': 'one'},
+        {'title': 'two'},
+        {'title': 'three'},
+        {'title': 'four', 'name': 'dima'},
+        {'title': 'four', 'name': 'alex'},
+        {'title': 'one', 'name': 'alex'},
+    ]
 };
 
-const tempAPI = {
-    news: []
+console.log(arr);
+console.log(remDupl(arr.news, 'title'));
+
+let state={
+    news:[]
 };
 
-const http = new Fetch();
-const base = new DBFirebase();
+let rec = remDupl(arr.news, 'title');
+console.log(rec);
 
-let country = 'ua';
-let category = 'general';
-let query = `${config.api_url}/top-headlines?country=${country}&apiKey=${config.api_key}`;
+*/
 
 
+ const state = {
+ news: []
+ };
 
-// setTimeout(() => {
+ const tempBase = {
+ news: []
+ };
 
-    base.getDBNews()
-        .then(querySnapshot => {
-            querySnapshot.forEach(baseNews => {
-                tempBase.news.push(baseNews.data());
-            });
-        });
+ const tempAPI = {
+ news: []
+ };
 
-    http.getAPINews(query)
-        .then(res => {
-            res.articles.forEach(apiNews => {
-                tempAPI.news.push(apiNews);
-            });
-        });
+ const http = new Fetch();
+ const base = new DBFirebase();
 
-// }, 5000);
+ let country = 'ua';
+ let category = 'general';
+ let query = `${config.api_url}/top-headlines?country=${country}&apiKey=${config.api_key}`;
 
 
 
-const catchArr=new PromisArr();
+ // setTimeout(() => {
 
-Promise.all([catchArr.luck(tempAPI), catchArr.luck(tempBase)])
-    .then(([api, base]) => {
-       return Object.assign(api, base);
-    })
-    .then(pulledNews => {
-       uniqueArray = rmD(pulledNews,'title');
-    })
-    .catch(err => console.log(err));
+ base.getDBNews()
+ .then(querySnapshot => {
+ querySnapshot.forEach(baseNews => {
+ tempBase.news.push(baseNews.data());
+ });
+ });
 
-// base.saveDBNews(news);
+ http.getAPINews(query)
+ .then(res => {
+ res.articles.forEach(apiNews => {
+ tempAPI.news.push(apiNews);
+ });
+ });
+
+ // }, 5000);
+
+
+
+ const catchArr=new PromisArr();
+
+ Promise.all([catchArr.luck(tempAPI), catchArr.luck(tempBase)])
+ .then(([api, base]) => {
+ return Object.assign(api, base);
+ })
+ .then(pulledNews => {
+ let tempRez = remDupl(pulledNews,'title');
+ return tempRez;
+ })
+ .then(cleanArr=>{
+ console.log(cleanArr.news[0]);
+     cleanArr.news[0].forEach((news)=>{ base.saveDBNews(news);})
+ })
+ .catch(err => console.log(err));
+
+
 
 
 

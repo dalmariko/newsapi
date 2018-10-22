@@ -4,66 +4,38 @@ const config = {
 
 };
 
-
-function removeDuplicates(arr, fild) {
-    let obj = {};
-
-    for (let item in arr) {
-        let str = arr[item][fild];
-        obj[str] = true;
+class PromisArr {
+    luck(arr) {
+        return new Promise((resolve, rejection) => {
+            arr.length > 0;
+            resolve(arr)
+        })
     }
-    return Object.keys(obj);
 }
 
+function rmD(originalArray, prop) {
+    var newArr = [];
+    var lookupObject  = {};
 
-let arr = [
-    {'title':'asdasd'},
-    {'title':'asdasd'},
-    {'title':'asdasd'},
-    {'title':'asdasd'},
-    {'title':'asdasd'},
-    {'title':'asdasd'},
-    {'title':'asdasd'},
-    {'title':'cvxs'},
-    {'title':'cvxs'},
-    {'title':'cvxs'},
-    {'title':'cvxs'},
-    {'title':'cvxs'},
-    {'title':'cvxs'},
-    {'title':'cvxs'},
-    {'title':'fsdf'},
-    {'title':'cvxcfxcvxcvxcv'},
-    {'title':'cvxcfxcvxcvxcv'},
-    {'title':'cvxcfxcvxcvxcv'},
-    {'title':'cvxcfxcvxcvxcv'},
-    {'title':'cvxcfxcvxcvxcv'},
-    {'title':'czxczx'},
-    {'title':'cvxs'},
-    {'title':'asdasd'},
-    {'title':'qczxczx'},
-    {'title':'qczxczx'},
-    {'title':'qczxczx'},
-    {'title':'qczxczx'},
-    {'title':'qczxczx'},
-    {'title':'qczxczx'},
-    {'title':'czxczx'},
-    {'title':'czxczx'},
-    {'title':'czxczx'},
-    {'title':'czxczx'},
-];
+    for(var i in originalArray) {
+        lookupObject[originalArray[i][prop]] = originalArray[i];
+    }
 
-console.log(removeDuplicates(arr,'title'));
+    for(i in lookupObject) {
+        newArr.push(lookupObject[i]);
+    }
+    return newArr;
+}
 
-
-
-/*
 
 const state = {
     news: []
 };
+
 const tempBase = {
     news: []
 };
+
 const tempAPI = {
     news: []
 };
@@ -74,6 +46,7 @@ const base = new DBFirebase();
 let country = 'ua';
 let category = 'general';
 let query = `${config.api_url}/top-headlines?country=${country}&apiKey=${config.api_key}`;
+
 
 
 // setTimeout(() => {
@@ -92,27 +65,25 @@ let query = `${config.api_url}/top-headlines?country=${country}&apiKey=${config.
             });
         });
 
-state.news = Object.assign(tempAPI, tempBase);
-
-*/
-
-// removeDuplicates(state.news,'title');
-// console.log(removeDuplicates(state.news,'title'));
-
 // }, 5000);
 
 
 
-// http.get(query)
-//     .then((res) => {
-//         res.articles.forEach(news => {
-//             news.id = Date.now();
-//            savenews.getLimitNuwses().forEach(getnews =>{
-//                // savenews.save(news);
-//                console.log(getnews);
-//            });
-//
-//
-//         });
-//     })
-// .catch(err=>console.log(err));
+const catchArr=new PromisArr();
+
+Promise.all([catchArr.luck(tempAPI), catchArr.luck(tempBase)])
+    .then(([api, base]) => {
+       return Object.assign(api, base);
+    })
+    .then(pulledNews => {
+       uniqueArray = rmD(pulledNews,'title');
+    })
+    .catch(err => console.log(err));
+
+// base.saveDBNews(news);
+
+
+
+
+
+

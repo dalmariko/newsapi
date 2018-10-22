@@ -4,28 +4,44 @@ const config = {
 
 };
 
-function removeDuplicates(oriAr, fild) {
-    let newArray = [];
-    let lookupObject = {};
 
-    for (let i in oriAr) {
-        lookupObject[oriAr[i][fild]] = oriAr[i];
-    }
+const remuvDuplicate = function (arr, field) {
+    arr.forEach(item => {
 
-    for (i in lookupObject) {
-        newArray.push(lookupObject[i]);
-    }
-    return newArray;
-}
+    });
+    return
+};
+
+
+let arr = [
+    {name: 'dima'},
+    {name: 'anna'},
+    {name: 'dima'},
+    {name: 'dima'},
+];
+console.log(remuvDuplicate(arr));
+
+
+
+
+
+
+
+
+
+
+
+
+/*
 
 const state = {
     news: []
 };
-const tempBase={
-    news:[]
+const tempBase = {
+    news: []
 };
-const tempAPI={
-    news:[]
+const tempAPI = {
+    news: []
 };
 
 const http = new Fetch();
@@ -52,6 +68,9 @@ http.getAPINews(query)
         });
     });
 
+state.news = Object.assign(tempAPI, tempBase);
+*/
+// console.log(remuvDuplicate(state.news));
 
 // }, 1000);
 

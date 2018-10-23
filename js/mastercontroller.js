@@ -42,7 +42,6 @@ const remDupl = function (arr, fild) {
     return rez;
 };
 
-/*
 let arr={
     news : [
         {'title': 'one'},
@@ -54,22 +53,11 @@ let arr={
     ]
 };
 
-console.log(arr);
-console.log(remDupl(arr.news, 'title'));
 
-let state={
-    news:[]
-};
-
+/*
 let rec = remDupl(arr.news, 'title');
-console.log(rec);
 
-*/
-
-
- const state = {
- news: []
- };
+console.log(rec);*/
 
  const tempBase = {
  news: []
@@ -110,19 +98,22 @@ console.log(rec);
 
  const catchArr=new PromisArr();
 
- Promise.all([catchArr.luck(tempAPI), catchArr.luck(tempBase)])
- .then(([api, base]) => {
- return Object.assign(api, base);
- })
- .then(pulledNews => {
- let tempRez = remDupl(pulledNews,'title');
- return tempRez;
- })
- .then(cleanArr=>{
- console.log(cleanArr.news[0]);
-     cleanArr.news[0].forEach((news)=>{ base.saveDBNews(news);})
- })
- .catch(err => console.log(err));
+new Promise((resolve,rejection)=>{
+    let arr = {
+        news: [
+            { 'title': 'one' },
+            { 'title': 'two' },
+            { 'title': 'three' },
+            { 'title': 'four', 'name': 'dima' },
+            { 'title': 'four', 'name': 'alex' },
+            { 'title': 'one', 'name': 'alex' }
+        ]
+    };
+    resolve(arr);
+})
+    .then(pulledNews => remDupl(pulledNews.news, 'title'))
+    .then(cleanArr => cleanArr.news.forEach(item=>{console.log(item)}))
+    .catch(err => console.log(err));
 
 
 

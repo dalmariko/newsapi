@@ -4,121 +4,86 @@ const config = {
 
 };
 
-class PromisArr {
-    luck(arr) {
-        return new Promise((resolve, rejection) => {
-            arr.length > 0;
-            resolve(arr)
-        })
-    }
-}
-/*
- function rmD(originalArray, prop) {
- var newArr = {news:[]};
- var lookupObject  = {};
-
- for(var i in originalArray) {
- lookupObject[originalArray[i][prop]] = originalArray[i];
- }
-
- for(i in lookupObject) {
- newArr.news.push(lookupObject[i]);
- }
- return newArr;
- }*/
-
 
 const remDupl = function (arr, fild) {
-    var rez = {news:[]};
-    var lookupObject  = {};
+    var rez = {news: []};
+    var lookupObject = {};
 
-    for(var i in arr) {
+    for (var i in arr) {
         lookupObject[arr[i][fild]] = arr[i];
     }
 
-    for( i in lookupObject) {
+    for (i in lookupObject) {
         rez.news.push(lookupObject[i]);
     }
     return rez;
 };
 
-let arr={
-    news : [
-        {'title': 'one'},
-        {'title': 'two'},
-        {'title': 'three'},
-        {'title': 'four', 'name': 'dima'},
-        {'title': 'four', 'name': 'alex'},
-        {'title': 'one', 'name': 'alex'},
-    ]
+
+const tempBase = {
+    news: []
 };
 
+const tempAPI = {
+    news: []
+};
 
-/*
-let rec = remDupl(arr.news, 'title');
+const http = new Fetch();
+const base = new DBFirebase();
 
-console.log(rec);*/
-
- const tempBase = {
- news: []
- };
-
- const tempAPI = {
- news: []
- };
-
- const http = new Fetch();
- const base = new DBFirebase();
-
- let country = 'ua';
- let category = 'general';
- let query = `${config.api_url}/top-headlines?country=${country}&apiKey=${config.api_key}`;
+let country = 'ua';
+let category = 'general';
+let query = `${config.api_url}/top-headlines?country=${country}&apiKey=${config.api_key}`;
 
 
+function getmoreData() {
+    base.getDBNews()
+        .then(querySnapshot => {
+            querySnapshot.forEach(baseNews => {
+                tempBase.news.push(baseNews.data());
+            });
+        });
 
- // setTimeout(() => {
-
- base.getDBNews()
- .then(querySnapshot => {
- querySnapshot.forEach(baseNews => {
- tempBase.news.push(baseNews.data());
- });
- });
-
- http.getAPINews(query)
- .then(res => {
- res.articles.forEach(apiNews => {
- tempAPI.news.push(apiNews);
- });
- });
-
- // }, 5000);
+    http.getAPINews(query)
+        .then(res => {
+            res.articles.forEach(apiNews => {
+                tempAPI.news.push(apiNews);
+            });
+        });
+}
 
 
+const GetDates = (timerId) => {
 
- const catchArr=new PromisArr();
+    getmoreData();
 
-new Promise((resolve,rejection)=>{
-    let arr = {
-        news: [
-            { 'title': 'one' },
-            { 'title': 'two' },
-            { 'title': 'three' },
-            { 'title': 'four', 'name': 'dima' },
-            { 'title': 'four', 'name': 'alex' },
-            { 'title': 'one', 'name': 'alex' }
-        ]
-    };
-    resolve(arr);
+      return  new Promise((resolve, reject) => {
+
+            if (tempBase.news.length <= 0 && tempAPI.news.length <= 0) {
+                timerId = setInterval(() => {
+                    console.log('ожидаю данные');
+                    return GetDates(timerId);
+                }, 1000);
+            } else {
+                console.log('данные Пришли');
+                clearInterval(timerId);
+                let st = {news: [...tempAPI.news, ...tempBase.news]};
+                return resolve(st);
+            }
+        })
+};
+
+GetDates().then(pulledNews => {
+    let st2 = remDupl(pulledNews.news, 'title');
+    return st2;
 })
-    .then(pulledNews => remDupl(pulledNews.news, 'title'))
-    .then(cleanArr => cleanArr.news.forEach(item=>{console.log(item)}))
+    .then(cleanArr => {
+        cleanArr.news.forEach(item => {
+            // console.log(item)
+            console.log('Данные пришли');
+        })
+    })
     .catch(err => console.log(err));
-
-
-
-
-
 
 
 

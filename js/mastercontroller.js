@@ -67,7 +67,7 @@ const GetDates = (timerId) => {
                 return GetDates(timerId);
             }, 1000);
         } else {
-            console.log('---------------------->>>  данные ');
+            console.log('---------------------->>>  данные прибыли');
             clearInterval(timerId);
             return resolve({news: [...tempAPI.news, ...tempBase.news]});
         }
@@ -87,14 +87,10 @@ const GetDates = (timerId) => {
 };
 
 let timerGetNews = setTimeout(function get() {
-
-
     GetDates();
     timerGetNews = setTimeout(get, 120000);
 }, 10);
 
 
-
-GetDates();
 
 

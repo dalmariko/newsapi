@@ -4,6 +4,10 @@ const config = {
 
 };
 
+let country = 'ua';
+let category = 'general';
+let query = `${config.api_url}/top-headlines?country=${country}&apiKey=${config.api_key}`;
+
 
 const remDupl = function (arr, fild) {
     var rez = {news: []};
@@ -20,20 +24,16 @@ const remDupl = function (arr, fild) {
 };
 
 
-const tempBase = {
+let tempBase = {
     news: []
 };
 
-const tempAPI = {
+let tempAPI = {
     news: []
 };
 
 const http = new Fetch();
 const base = new DBFirebase();
-
-let country = 'ua';
-let category = 'general';
-let query = `${config.api_url}/top-headlines?country=${country}&apiKey=${config.api_key}`;
 
 
 function getmoreData() {
@@ -50,6 +50,8 @@ function getmoreData() {
                 tempAPI.news.push(apiNews);
             });
         });
+
+
 }
 
 
@@ -57,33 +59,42 @@ const GetDates = (timerId) => {
 
     getmoreData();
 
-      return  new Promise((resolve, reject) => {
+    return new Promise((resolve, reject) => {
 
-            if (tempBase.news.length <= 0 && tempAPI.news.length <= 0) {
-                timerId = setInterval(() => {
-                    console.log('ожидаю данные');
-                    return GetDates(timerId);
-                }, 1000);
-            } else {
-                console.log('данные Пришли');
-                clearInterval(timerId);
-                let st = {news: [...tempAPI.news, ...tempBase.news]};
-                return resolve(st);
-            }
+        if (tempBase.news.length <= 0 && tempAPI.news.length <= 0) {
+            timerId = setInterval(() => {
+                console.log('ожидаю данные .............');
+                return GetDates(timerId);
+            }, 1000);
+        } else {
+            console.log('---------------------->>>  данные ');
+            clearInterval(timerId);
+            return resolve({news: [...tempAPI.news, ...tempBase.news]});
+        }
+    })
+        .then(pulledNews => {
+            return remDupl(pulledNews.news, 'title');
         })
+        .then(cleanArr => {
+
+            cleanArr.news.forEach(oneNews => {
+                base.saveDBNews(oneNews)
+            })
+        })
+        .catch(err => console.log(err));
+
+
 };
 
-GetDates().then(pulledNews => {
-    let st2 = remDupl(pulledNews.news, 'title');
-    return st2;
-})
-    .then(cleanArr => {
-        cleanArr.news.forEach(item => {
-            // console.log(item)
-            console.log('Данные пришли');
-        })
-    })
-    .catch(err => console.log(err));
+let timerGetNews = setTimeout(function get() {
 
+
+    GetDates();
+    timerGetNews = setTimeout(get, 120000);
+}, 10);
+
+
+
+GetDates();
 
 

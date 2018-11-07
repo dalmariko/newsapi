@@ -73,13 +73,15 @@ const GetDates = (timerId) => {
         }
     })
         .then(pulledNews => {
-            return remDupl(pulledNews.news, 'title');
+           let cleeanArrs = remDupl(pulledNews.news, 'title');
+           console.log(cleeanArrs);
+           return cleeanArrs;
         })
         .then(cleanArr => {
-
-            cleanArr.news.forEach(oneNews => {
-                base.saveDBNews(oneNews)
-            })
+                console.log(cleanArr.news);
+            // cleanArr.news.forEach(oneNews => {
+            //     base.saveDBNews(oneNews)
+            // })
         })
         .catch(err => console.log(err));
 
@@ -94,3 +96,4 @@ let timerGetNews = setTimeout(function get() {
 
 
 
+//todo  count differents news and if different more them 0 pull to base

@@ -26,6 +26,10 @@ const http = new Fetch();
 
 http.get(query)
     .then(res => {
-        res.articles.forEach();
+        res.articles.forEach((news) => {
+            let d = Date.now();
+            news.id =d;
+            console.log(news.id, '--' ,news.title);
+        });
     })
-.catch(err => console.log(err));
+    .catch(err => console.log(err));

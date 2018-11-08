@@ -88,10 +88,10 @@ base.getTimeLebel()
             pullLabels: new Array()
         };
         labelS.forEach(doc => {
-            let oneDoc={
-                dateId:  doc.id,
-                isGrabe:  doc.data().isGrabe,
-                timeStemp:  doc.data().timeStemp,
+            let oneDoc = {
+                dateId: doc.id,
+                isGrabe: doc.data().isGrabe,
+                timeStemp: doc.data().timeStemp * 1,
             };
             allLabeles.pullLabels.push(oneDoc);
         });
@@ -99,23 +99,34 @@ base.getTimeLebel()
         return allLabeles;
     })
     .then(oldTimeS => {
-        oldTimeS.pullLabels.forEach(oldTime => {
-        console.log(oldTime);
-            //     let nowTime = Date.now();
-        //     let laterTime = oldTime.timeStemp * 1;
-        //     if (nowTime - laterTime < 600000 && oldTime.isGrabe === false) {
-        //         // grabeApi();
-        //         let replaceLabelData = {isGrabe: true};
-        //         let fresLabel = {isGrabe: false, timeStemp: Date.now() + ''};
-        //
-        //         // base.setTimeLebel(oldTime.dateId, replaceLabelData);
-        //         // base.addTimeLebel(fresLabel);
-        //         console.log(replaceLabelData);
-        //         console.log(fresLabel);
-        //     } else {
-        //         // getFromBase();
-        //     }
-        })
+
+
+        let lastDate = oldTimeS.pullLabels.sort(function (a, b) {
+            return b.timeStemp - a.timeStemp;
+        })[0];
+
+
+        let nowTime = Date.now();
+        let laterTime = lastDate.timeStemp*1;
+
+        console.log(lastDate);
+        console.log(nowTime - laterTime);
+
+        let fresLabel = {isGrabe: false, timeStemp: Date.now() + ''};
+
+        if (nowTime - laterTime > 10000 && lastDate.isGrabe === false) {
+            // // grabeApi();
+            let replaceLabelData = {isGrabe: true, timeStemp:lastDate.timeStemp+''};
+
+            base.setTimeLebel(lastDate.dateId, replaceLabelData);
+            base.addTimeLebel(fresLabel);
+            console.log('сграбил и поменял статус метки');
+        } else {
+            // getFromBase();
+            base.addTimeLebel(fresLabel);
+            console.log('достал из базы и создал свежую метку');
+        }
+
     })
     .catch(err => console.log(err));
 

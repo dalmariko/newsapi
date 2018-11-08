@@ -81,27 +81,27 @@ const grabeApi = function () {
     }
 };
 
-let allLabeles={};
 
 base.getTimeLebel()
     .then(labelS => {
-        let pullLabels =new Array();
+        let allLabeles = {
+            pullLabels: new Array()
+        };
         labelS.forEach(doc => {
-            pullLabels={
+            let oneDoc={
                 dateId:  doc.id,
-                isGrabe: doc.data().isGrabe,
-                timeStemp:doc.data().timeStemp
+                isGrabe:  doc.data().isGrabe,
+                timeStemp:  doc.data().timeStemp,
             };
-
-
-            // console.log(date);
+            allLabeles.pullLabels.push(oneDoc);
         });
-        return pullLabels;
+
+        return allLabeles;
     })
     .then(oldTimeS => {
-        console.log(oldTimeS);
-        // oldTimeS.forEach(oldTime => {
-        //     let nowTime = Date.now();
+        oldTimeS.pullLabels.forEach(oldTime => {
+        console.log(oldTime);
+            //     let nowTime = Date.now();
         //     let laterTime = oldTime.timeStemp * 1;
         //     if (nowTime - laterTime < 600000 && oldTime.isGrabe === false) {
         //         // grabeApi();
@@ -115,7 +115,7 @@ base.getTimeLebel()
         //     } else {
         //         // getFromBase();
         //     }
-        // })
+        })
     })
     .catch(err => console.log(err));
 

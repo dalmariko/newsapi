@@ -3,9 +3,9 @@ const config = {
     api_key: 'ea10580709394a6487ddd7d48952b1f1',
 
 };
-
+//
 // $.getJSON('https://json.geoiplookup.io/api?callback=?', function(data) {
-//     console.log(JSON.stringify(data, null, 2));
+//     console.log(JSON.stringify(data, null, 1));
 // });
 
 let countrys = ['ua', 'us', 'gb'];
@@ -18,12 +18,22 @@ const makeQuery = (country, category) => {
 
 const http = new Fetch();
 const base = new DBFirebase();
+const ip = new IP();
+const ipfetch = new IPFetch();
 
-//TODO Написать функцию которая будет создавать общую временную метку грабежа.
-//TODO Затем добавлять ее в базу.
-//TODO Также в коллекции меток нужно добавлять статус грабежа. ограбленно или нет.
-//TODO Чтобы одновременно данные не грабились двумя пользователями.
-//TODO И сперед грабежом новостей открывшых страницу доставать эту метку с сравнивать нужно ли грабить или нет
+
+
+ip.get('https://json.geoiplookup.io/api')
+    .then(data=>{
+        console.log(data);
+    });
+
+
+
+
+ipfetch.get('https://json.geoiplookup.io/api')
+    .then(response=>console.log(response))
+    .catch(err=>console.log(err));
 
 
 /*
@@ -68,19 +78,19 @@ const grabeApi = function () {
                     return temp;
                 })
                 .then(prepareNews => {
-                    // prepareNews.forEach(news=>{
-                    // base.saveDBNews(collectionName,news);
-                    // });
-                    // console.log('dates addet to collection', collectionName,'\n');
-
-
+                    prepareNews.forEach(news => {
+                        base.saveDBNews(collectionName, news);
+                    });
+                    console.log('dates addet to collection', collectionName, '\n');
                 })
                 .catch(err => console.log(err));
 
         }
     }
 };
-setTimeout(()=>{
+
+const GetDates = () => {
+
     base.getTimeLebel()
         .then(labelS => {
             let allLabeles = {
@@ -99,13 +109,16 @@ setTimeout(()=>{
         })
         .then(oldTimeS => {
 
-            let lastDate = oldTimeS.pullLabels.sort((a, b) => {return b.timeStemp - a.timeStemp;})[0];
+            let lastDate = oldTimeS.pullLabels.sort((a, b) => {
+                return b.timeStemp - a.timeStemp;
+            })[0];
 
             let nowTime = Date.now();
             let laterTime = lastDate.timeStemp * 1;
             let fresLabel = {isGrabe: false, timeStemp: Date.now() + ''};
-            if (nowTime - laterTime > 10000 && lastDate.isGrabe === false) {
-                // // grabeApi();
+
+            if (nowTime - laterTime > 1200000 && lastDate.isGrabe === false) {
+                grabeApi();
                 let replaceLabelData = {isGrabe: true, timeStemp: lastDate.timeStemp + ''};
 
                 base.setTimeLebel(lastDate.dateId, replaceLabelData);
@@ -113,14 +126,15 @@ setTimeout(()=>{
                 console.log('сграбил и поменял статус метки');
             } else {
                 // getFromBase();
-                base.addTimeLebel(fresLabel);
-                console.log('достал из базы и создал свежую метку');
+                // base.addTimeLebel(fresLabel);
+                console.log('достал из базы');
             }
 
         })
         .catch(err => console.log(err));
+};
 
-
-},1200000);
-
-
+// let timerGetNews = setTimeout(function get() {
+//     GetDates();
+//     timerGetNews = setTimeout(get, 10000);
+// }, 10);

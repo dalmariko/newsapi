@@ -4,43 +4,76 @@ const config = {
 
 };
 
-let temp={
-    news:[]
-};
 
-let country = 'ua';
-let category = 'general';
+let countrys=['ua','us','gb'];
 let categorys = ['business', 'entertainment', 'general', 'health', 'science', 'technology'];
 
-let query = `${config.api_url}/top-headlines?country=${country}&category=${category}&apiKey=${config.api_key}`;
+const makeQuery = (country,category)=>{
+    return `${config.api_url}/top-headlines?country=${country}&category=${category}&apiKey=${config.api_key}`;
+};
+
 
 
 const http = new Fetch();
 const base = new DBFirebase();
 
-//TODO Написать функцию которая будет забирать данные из каждой страны, и каждого раздела страны через каэждые 10минут.
-//TODO Написать функцию которая будет отправлять эти данные в firebase в свои коллекции.
-//TODO В firebase несколько таблиц по странамИ их категориям.
-
-// UAbusiness
-// UAentertainment
-// UAgeneral
-// UAhealth
-// UAscience
-// UAtechnology
+//TODO Написать функцию которая будет создавать общую временную метку грабежа.
+//TODO Затем добавлять ее в базу.
+//TODO Также в коллекции меток нужно добавлять статус грабежа. ограбленно или нет.
+//TODO Чтобы одновременно данные не грабились двумя пользователями.
+//TODO И сперед грабежом новостей открывшых страницу доставать эту метку с сравнивать нужно ли грабить или нет
 
 
-// http.get(query)
-//     .then(res => {
-//         res.articles.forEach((news) => {
-//             news.id = SHA256(Date.now()+news.title);
-//             temp.news.push(news);
-//         });
-//         return temp.news;
-//     })
-//     .then(prepareNews=>{
-//         prepareNews.forEach(news=>{
-//             base.saveDBNews('UAgeneral',news)
-//         })
-//     })
-//     .catch(err => console.log(err));
+/*
+UAbusiness
+UAentertainment
+UAgeneral
+UAhealth
+UAscience
+UAtechnology
+
+USbusiness
+USentertainment
+USgeneral
+UShealth
+USscience
+UStechnology
+
+GBbusiness
+GBentertainment
+GBgeneral
+GBhealth
+GBscience
+GBtechnology
+*/
+
+
+
+for(let i=0;i<countrys.length;i++){
+    for(let k=0;k<categorys.length;k++){
+        let country = countrys[i];
+        let category = categorys[k];
+        let collectionName = country.toUpperCase()+category;
+        let query = makeQuery(country,category);
+
+        http.get(query)
+            .then(res => {
+                let temp = new Array();
+                res.articles.forEach((news) => {
+                    news.id = SHA256(Date.now()+news.title);
+                    temp.push(news);
+                });
+                return temp;
+            })
+            .then(prepareNews=>{
+                prepareNews.forEach(news=>{
+                    base.saveDBNews(collectionName,news);
+                });
+                console.log('dates addet to collection', collectionName,'\n');
+            })
+            .catch(err => console.log(err));
+
+    }
+}
+
+

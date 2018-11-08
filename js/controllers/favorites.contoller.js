@@ -1,10 +1,4 @@
-//
-// if (state.news.length > 0) {
-//     ui.clearContainer();
-//     state.news.forEach((news) => {
-//         ui.addNews(news);
-//     });
-// }
+
 
 ui.newsContainer.addEventListener('click', function (e) {
     if (e.target.closest('.remove-btn')) {

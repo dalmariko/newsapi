@@ -6,9 +6,12 @@ const config = {
 
 let country = 'ua';
 let category = 'general';
-let categorys=['business','entertainment','general','health','science','technology'];
+let categorys = ['business', 'entertainment', 'general', 'health', 'science', 'technology'];
 
 let query = `${config.api_url}/top-headlines?country=${country}&category=${category}&apiKey=${config.api_key}`;
+
+
+const http = new Fetch();
 
 //TODO Написать функцию которая будет забирать данные из каждой страны, и каждого раздела страны через каэждые 10минут.
 //TODO Написать функцию которая будет отправлять эти данные в firebase в свои коллекции.
@@ -21,4 +24,8 @@ let query = `${config.api_url}/top-headlines?country=${country}&category=${categ
 // UAscience
 // UAtechnology
 
-
+http.get(query)
+    .then(res => {
+        res.articles.forEach();
+    })
+.catch(err => console.log(err));

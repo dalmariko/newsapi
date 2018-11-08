@@ -1,12 +1,7 @@
 
 const ui = new UI();
 
-http.getAPINews(query)
-    .then(res => {
-        res.articles.forEach(apiNews => {
-            ui.addNews(apiNews);
-        });
-    });
+
 
 ui.selectCountry.addEventListener('click', e => {
 

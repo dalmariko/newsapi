@@ -80,54 +80,47 @@ const grabeApi = function () {
         }
     }
 };
-
-
-base.getTimeLebel()
-    .then(labelS => {
-        let allLabeles = {
-            pullLabels: new Array()
-        };
-        labelS.forEach(doc => {
-            let oneDoc = {
-                dateId: doc.id,
-                isGrabe: doc.data().isGrabe,
-                timeStemp: doc.data().timeStemp * 1,
+setTimeout(()=>{
+    base.getTimeLebel()
+        .then(labelS => {
+            let allLabeles = {
+                pullLabels: new Array()
             };
-            allLabeles.pullLabels.push(oneDoc);
-        });
+            labelS.forEach(doc => {
+                let oneDoc = {
+                    dateId: doc.id,
+                    isGrabe: doc.data().isGrabe,
+                    timeStemp: doc.data().timeStemp * 1,
+                };
+                allLabeles.pullLabels.push(oneDoc);
+            });
 
-        return allLabeles;
-    })
-    .then(oldTimeS => {
+            return allLabeles;
+        })
+        .then(oldTimeS => {
+
+            let lastDate = oldTimeS.pullLabels.sort((a, b) => {return b.timeStemp - a.timeStemp;})[0];
+
+            let nowTime = Date.now();
+            let laterTime = lastDate.timeStemp * 1;
+            let fresLabel = {isGrabe: false, timeStemp: Date.now() + ''};
+            if (nowTime - laterTime > 10000 && lastDate.isGrabe === false) {
+                // // grabeApi();
+                let replaceLabelData = {isGrabe: true, timeStemp: lastDate.timeStemp + ''};
+
+                base.setTimeLebel(lastDate.dateId, replaceLabelData);
+                base.addTimeLebel(fresLabel);
+                console.log('сграбил и поменял статус метки');
+            } else {
+                // getFromBase();
+                base.addTimeLebel(fresLabel);
+                console.log('достал из базы и создал свежую метку');
+            }
+
+        })
+        .catch(err => console.log(err));
 
 
-        let lastDate = oldTimeS.pullLabels.sort(function (a, b) {
-            return b.timeStemp - a.timeStemp;
-        })[0];
-
-
-        let nowTime = Date.now();
-        let laterTime = lastDate.timeStemp*1;
-
-        console.log(lastDate);
-        console.log(nowTime - laterTime);
-
-        let fresLabel = {isGrabe: false, timeStemp: Date.now() + ''};
-
-        if (nowTime - laterTime > 10000 && lastDate.isGrabe === false) {
-            // // grabeApi();
-            let replaceLabelData = {isGrabe: true, timeStemp:lastDate.timeStemp+''};
-
-            base.setTimeLebel(lastDate.dateId, replaceLabelData);
-            base.addTimeLebel(fresLabel);
-            console.log('сграбил и поменял статус метки');
-        } else {
-            // getFromBase();
-            base.addTimeLebel(fresLabel);
-            console.log('достал из базы и создал свежую метку');
-        }
-
-    })
-    .catch(err => console.log(err));
+},1200000);
 
 

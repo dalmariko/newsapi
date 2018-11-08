@@ -9,7 +9,7 @@ class DBFirebase{
 
 
     getTimeLebel(){
-        return db.collection('timeLabel').get();
+        return db.collection('timeLabel').orderBy("timeStemp", "desc").limit(5).get();
     }
 
     addTimeLebel(freshLabel){

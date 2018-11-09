@@ -19,9 +19,29 @@ const ip = new Fetch();
 
 
 ip.get('http://www.geoplugin.net/json.gp')
-    .then(response=>console.log(response))
-    .catch(err=>console.log(err));
+    .then(response => {
+        let fresh;
+        for (let item in response) {
+            fresh={
+                request:response['geoplugin_request'],
+                city:response['geoplugin_city'],
+                region:response['geoplugin_region'],
+                regionCode:response['geoplugin_regionCode'],
+                regionName:response['geoplugin_regionName'],
+                countryCode:response['geoplugin_countryCode'],
+                countryName:response['geoplugin_countryName'],
+                continentCode:response['geoplugin_continentCode'],
+                latitude:response['geoplugin_latitude'],
+                longitude:response['geoplugin_longitude'],
+                timezone:response['geoplugin_timezone'],
+                currencyCode:response['geoplugin_currencyCode'],
+                currencyConverter:response['geoplugin_currencyConverter'],
+            }
+        }
+        return fresh;
 
+    })
+    .catch(err => console.log(err));
 
 /*
  UAbusiness
@@ -102,21 +122,23 @@ const GetDates = () => {
 
             let nowTime = Date.now();
             let laterTime = lastDate.timeStemp * 1;
-            let fresLabel = {isGrabe: false, timeStemp: Date.now() + ''};
+
 
             if (nowTime - laterTime > 1200000 && lastDate.isGrabe === false) {
                 grabeApi();
-                let replaceLabelData = {isGrabe: true, timeStemp: lastDate.timeStemp + ''};
 
-                base.setTimeLebel(lastDate.dateId, replaceLabelData);
+                let fresLabel = {isGrabe: false, timeStemp: Date.now() + ''};
                 base.addTimeLebel(fresLabel);
+
+                let replaceLabelData = {isGrabe: true, timeStemp: lastDate.timeStemp + ''};
+                base.setTimeLebel(lastDate.dateId, replaceLabelData);
+
                 console.log('сграбил и поменял статус метки');
             } else {
                 // getFromBase();
                 // base.addTimeLebel(fresLabel);
                 console.log('достал из базы');
             }
-
         })
         .catch(err => console.log(err));
 };

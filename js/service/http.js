@@ -26,40 +26,4 @@ class Fetch {
     }
 }
 
-class IP {
-    get(url) {
-        return new Promise((resolve, reject) => {
-            const xhr = new XMLHttpRequest();
-            xhr.open('GET', url, true);
-            xhr.responseType = 'json';
-            xhr.send();
 
-            xhr.addEventListener('load', function () {
-                resolve(xhr.response);
-            });
-
-            xhr.addEventListener('error', function () {
-                reject('http error');
-            })
-        })
-    }
-}
-
-class IPFetch {
-    get(url) {
-        return new Promise((resolve,reject)=>{
-            fetch(url, {
-                method: "get",
-                // // // body: JSON.stringify(data),
-                // headers: {
-                //     "Content-Type": "application/json"
-                //  },
-                // //  mode: 'cors',
-                credentials: "omit"
-            })
-                .then(response => response.json())
-                .then(response_body => resolve(response_body))
-                .catch(err => reject(err));
-        });
-    }
-}

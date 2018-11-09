@@ -3,10 +3,7 @@ const config = {
     api_key: 'ea10580709394a6487ddd7d48952b1f1',
 
 };
-//
-// $.getJSON('https://json.geoiplookup.io/api?callback=?', function(data) {
-//     console.log(JSON.stringify(data, null, 1));
-// });
+
 
 let countrys = ['ua', 'us', 'gb'];
 let categorys = ['business', 'entertainment', 'general', 'health', 'science', 'technology'];
@@ -18,20 +15,10 @@ const makeQuery = (country, category) => {
 
 const http = new Fetch();
 const base = new DBFirebase();
-const ip = new IP();
-const ipfetch = new IPFetch();
+const ip = new Fetch();
 
 
-
-ip.get('https://json.geoiplookup.io/api')
-    .then(data=>{
-        console.log(data);
-    });
-
-
-
-
-ipfetch.get('https://json.geoiplookup.io/api')
+ip.get('http://www.geoplugin.net/json.gp')
     .then(response=>console.log(response))
     .catch(err=>console.log(err));
 

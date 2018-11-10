@@ -8,40 +8,9 @@ const config = {
 let countrys = ['ua', 'us', 'gb'];
 let categorys = ['business', 'entertainment', 'general', 'health', 'science', 'technology'];
 
-const makeQuery = (country, category) => {
-    return `${config.api_url}/top-headlines?country=${country}&category=${category}&apiKey=${config.api_key}`;
-};
-
-
 const http = new Fetch();
 const base = new DBFirebase();
 const ip = new Fetch();
-
-
-ip.get('http://www.geoplugin.net/json.gp')
-    .then(response => {
-        let fresh;
-        for (let item in response) {
-            fresh={
-                request:response['geoplugin_request'],
-                city:response['geoplugin_city'],
-                region:response['geoplugin_region'],
-                regionCode:response['geoplugin_regionCode'],
-                regionName:response['geoplugin_regionName'],
-                countryCode:response['geoplugin_countryCode'],
-                countryName:response['geoplugin_countryName'],
-                continentCode:response['geoplugin_continentCode'],
-                latitude:response['geoplugin_latitude'],
-                longitude:response['geoplugin_longitude'],
-                timezone:response['geoplugin_timezone'],
-                currencyCode:response['geoplugin_currencyCode'],
-                currencyConverter:response['geoplugin_currencyConverter'],
-            }
-        }
-        return fresh;
-
-    })
-    .catch(err => console.log(err));
 
 /*
  UAbusiness
@@ -66,8 +35,16 @@ ip.get('http://www.geoplugin.net/json.gp')
  GBtechnology
  */
 
+let newIPData;
+let lastTimeUpdateBase;
 
-const grabeApi = function () {
+
+const grabeApi = () => {
+
+    const makeQuery = (country, category) => {
+        return `${config.api_url}/top-headlines?country=${country}&category=${category}&apiKey=${config.api_key}`;
+    };
+
     for (let i = 0; i < countrys.length; i++) {
         for (let k = 0; k < categorys.length; k++) {
             let country = countrys[i];
@@ -96,9 +73,8 @@ const grabeApi = function () {
     }
 };
 
-const GetDates = () => {
-
-    base.getTimeLebel()
+const getTimeLabel = () => {
+    return base.getTimeLebel()
         .then(labelS => {
             let allLabeles = {
                 pullLabels: new Array()
@@ -115,35 +91,73 @@ const GetDates = () => {
             return allLabeles;
         })
         .then(oldTimeS => {
-
-            let lastDate = oldTimeS.pullLabels.sort((a, b) => {
+            lastTimeUpdateBase = oldTimeS.pullLabels.sort((a, b) => {
                 return b.timeStemp - a.timeStemp;
             })[0];
-
-            let nowTime = Date.now();
-            let laterTime = lastDate.timeStemp * 1;
-
-
-            if (nowTime - laterTime > 1200000 && lastDate.isGrabe === false) {
-                grabeApi();
-
-                let fresLabel = {isGrabe: false, timeStemp: Date.now() + ''};
-                base.addTimeLebel(fresLabel);
-
-                let replaceLabelData = {isGrabe: true, timeStemp: lastDate.timeStemp + ''};
-                base.setTimeLebel(lastDate.dateId, replaceLabelData);
-
-                console.log('сграбил и поменял статус метки');
-            } else {
-                // getFromBase();
-                // base.addTimeLebel(fresLabel);
-                console.log('достал из базы');
-            }
         })
         .catch(err => console.log(err));
 };
 
-// let timerGetNews = setTimeout(function get() {
-//     GetDates();
-//     timerGetNews = setTimeout(get, 10000);
-// }, 10);
+const getIPinfo = () => {
+    ip.get('http://www.geoplugin.net/json.gp')
+        .then(response => {
+            let fresh;
+            for (let item in response) {
+                newIPData = {
+                    request: response['geoplugin_request'],
+                    city: response['geoplugin_city'],
+                    region: response['geoplugin_region'],
+                    regionCode: response['geoplugin_regionCode'],
+                    regionName: response['geoplugin_regionName'],
+                    countryCode: response['geoplugin_countryCode'],
+                    countryName: response['geoplugin_countryName'],
+                    continentCode: response['geoplugin_continentCode'],
+                    latitude: response['geoplugin_latitude'],
+                    longitude: response['geoplugin_longitude'],
+                    timezone: response['geoplugin_timezone'],
+                    currencyCode: response['geoplugin_currencyCode'],
+                    currencyConverter: response['geoplugin_currencyConverter'],
+                }
+            }
+            return newIPData;
+        })
+        .catch(err => console.log(err));
+};
+
+const getNewsFromBase = () => {
+};
+
+const goNextLoop =()=>{
+
+    Promise.all([getTimeLabel()])
+        .then(timerGo => {
+            compareLabelTime();
+        })
+        .catch(err => console.log(err));
+
+};
+
+
+// let laterTime = lastTimeUpdateBase.timeStemp * 1;
+
+
+const compareLabelTime = () => {
+
+    handle = setTimeout(function get() {
+        let nowTime = Date.now();
+        // if (nowTime - lastTimeUpdateBase.timeStemp > 1200000 && lastTimeUpdateBase.isGrabe === false) {
+        if (nowTime - lastTimeUpdateBase.timeStemp > 120000 && lastTimeUpdateBase.isGrabe === false) {
+            // grabeApi();
+            base.addTimeLebel({isGrabe: false, timeStemp: Date.now() + ''});
+            base.setTimeLebel(lastTimeUpdateBase.dateId, {isGrabe: true, timeStemp: lastTimeUpdateBase.timeStemp + ''});
+            console.log('проверка метки успешна, новая метка добавлена, старая метка изменена');
+         goNextLoop();
+        }
+        console.log('проверяем локально');
+        handle = setTimeout(get, 10000);
+    }, 10);
+};
+
+
+
+// goNextLoop();

@@ -20,4 +20,9 @@ class DBFirebase{
         return db.collection('timeLabel').doc(docId).set(replaceLabelData);
     }
 
+
+    getDocument(collectionName,docId){
+        return db.collection(collectionName).doc(docId).get();
+    }
+
 }

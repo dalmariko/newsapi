@@ -127,37 +127,34 @@ const getIPinfo = () => {
 const getNewsFromBase = () => {
 };
 
-const goNextLoop =()=>{
 
+const goNextLoop =()=>{
     Promise.all([getTimeLabel()])
         .then(timerGo => {
             compareLabelTime();
         })
         .catch(err => console.log(err));
-
 };
-
 
 // let laterTime = lastTimeUpdateBase.timeStemp * 1;
 
 
 const compareLabelTime = () => {
-
+let handle;
     handle = setTimeout(function get() {
         let nowTime = Date.now();
-        // if (nowTime - lastTimeUpdateBase.timeStemp > 1200000 && lastTimeUpdateBase.isGrabe === false) {
         if (nowTime - lastTimeUpdateBase.timeStemp > 120000 && lastTimeUpdateBase.isGrabe === false) {
-            // grabeApi();
             base.addTimeLebel({isGrabe: false, timeStemp: Date.now() + ''});
             base.setTimeLebel(lastTimeUpdateBase.dateId, {isGrabe: true, timeStemp: lastTimeUpdateBase.timeStemp + ''});
             console.log('проверка метки успешна, новая метка добавлена, старая метка изменена');
-         goNextLoop();
+         clearTimeout(handle);
+         return goNextLoop();
         }
+        console.log(nowTime - lastTimeUpdateBase.timeStemp);
+        console.log(lastTimeUpdateBase);
         console.log('проверяем локально');
         handle = setTimeout(get, 10000);
     }, 10);
 };
 
-
-
-// goNextLoop();
+goNextLoop();

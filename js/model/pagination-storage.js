@@ -1,4 +1,4 @@
-class Pagination {
+ class Pagination {
 
     //взять страницу
     getPage(){}

@@ -4,6 +4,9 @@ const config = {
 
 };
 
+const state={
+    news:[],
+};
 
 let countrys = ['ua', 'us', 'gb'];
 let categorys = ['business', 'entertainment', 'general', 'health', 'science', 'technology'];
@@ -125,6 +128,11 @@ const getIPinfo = () => {
 
 const getNewsFromBase = () => {
     console.log('достал из базы');
+    return base.getDBNews('UAbusiness')
+        .then(newses =>{
+state.news
+    })
+        .catch(err => console.log(err));
 };
 
 

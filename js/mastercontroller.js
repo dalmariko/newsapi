@@ -131,7 +131,7 @@ const getNewsFromBase = () => {
     return base.getDBNews('UAbusiness')
         .then(newses =>{
 console.log(newses);
-            // state.news=newses;
+            newses.articles.forEach((news, i) => news._id = i);
 
     })
         .catch(err => console.log(err));

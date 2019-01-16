@@ -130,7 +130,9 @@ const getNewsFromBase = () => {
     console.log('достал из базы');
     return base.getDBNews('UAbusiness')
         .then(newses =>{
-state.news
+console.log(newses);
+            // state.news=newses;
+
     })
         .catch(err => console.log(err));
 };

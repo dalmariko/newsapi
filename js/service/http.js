@@ -15,9 +15,9 @@ class Http {
     }
 }
 
-class Fetch{
-    get(url){
-        return new Promise((resolve,reject)=>{
+class Fetch {
+    get(url) {
+        return new Promise((resolve, reject) => {
             fetch(url)
                 .then(response => response.json())
                 .then(response_body => resolve(response_body))

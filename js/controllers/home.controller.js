@@ -1,31 +1,6 @@
-const config = {
-    api_url: 'https://newsapi.org/v2',
-    api_key: 'ea10580709394a6487ddd7d48952b1f1',
 
-};
-
-const state = {
-    news: []
-};
-
-const http = new Fetch();
 const ui = new UI();
-const favorites = new Favorites();
-let country = 'ua';
-let category = 'general';
-let query = `${config.api_url}/top-headlines?country=${country}&apiKey=${config.api_key}`;
 
-
-http.get(query)
-    .then((res) => {
-    res.articles.forEach((news, i) => {
-        news._id = i
-    });
-    state.news = res.articles;
-    res.articles.forEach((news) => {
-        ui.addNews(news)
-    });
-});
 
 
 ui.selectCountry.addEventListener('click', e => {
@@ -36,7 +11,7 @@ ui.selectCountry.addEventListener('click', e => {
         country = e.target.dataset.country;
         const getQuery = `${config.api_url}/top-headlines?country=${country}&apiKey=${config.api_key}`;
         const http = new Fetch();
-        http.get(getQuery)
+        http.getAPINews(getQuery)
             .then( res => {
 
             ui.clearContainer();
@@ -59,7 +34,7 @@ ui.selectCategorys.addEventListener('click', e => {
 
         const getQuery = `${config.api_url}/top-headlines?country=${country}&category=${category}&apiKey=${config.api_key}`;
         const http = new Fetch();
-        http.get(getQuery)
+        http.getAPINews(getQuery)
             .then( res => {
 
             ui.clearContainer();
@@ -93,7 +68,7 @@ var scrollAnimationStep = function (initPos, stepAmount) {
     newPos && setTimeout(function () {
         scrollAnimationStep(newPos, stepAmount);
     }, stepTime);
-}
+};
 
 var scrollTopAnimated = function (speed) {
     var topOffset = docBody.scrollTop || focElem.scrollTop;

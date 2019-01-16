@@ -87,7 +87,6 @@ const getTimeLabel = () => {
                 };
                 allLabeles.pullLabels.push(oneDoc);
             });
-
             return allLabeles;
         })
         .then(oldTimeS => {
@@ -125,11 +124,12 @@ const getIPinfo = () => {
 };
 
 const getNewsFromBase = () => {
+    console.log('достал из базы');
 };
 
 
 const goNextLoop =()=>{
-    Promise.all([getTimeLabel()])
+    Promise.all([getNewsFromBase(),getTimeLabel()])
         .then(timerGo => {
             compareLabelTime();
         })
@@ -143,6 +143,9 @@ const compareLabelTime = () => {
 let handle;
     handle = setTimeout(function get() {
         let nowTime = Date.now();
+
+        console.log('Время сейчас =',nowTime,'|','Время последнего обновления = ',lastTimeUpdateBase.timeStemp,'|',nowTime - lastTimeUpdateBase.timeStemp);
+
         if (nowTime - lastTimeUpdateBase.timeStemp > 1200000 && lastTimeUpdateBase.isGrabe === false) {
             grabeApi();
             base.addTimeLebel({isGrabe: false, timeStemp: Date.now() + ''});
@@ -151,7 +154,6 @@ let handle;
          clearTimeout(handle);
          return goNextLoop();
         }
-        console.log(nowTime - lastTimeUpdateBase.timeStemp);
         console.log(lastTimeUpdateBase);
         console.log('проверяем локально');
         handle = setTimeout(get, 10000);

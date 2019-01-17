@@ -4,13 +4,11 @@ const config = {
 
 };
 
-const state = {
-
-};
+const state = {};
 
 let countrys = ['ua', 'us', 'gb'];
 let categorys = ['business', 'entertainment', 'general', 'health', 'science', 'technology'];
-let categorysInBase=[];
+let categorysInBase = [];
 
 
 const http = new Fetch();
@@ -53,7 +51,6 @@ const makeName = () => {
         }
     }
 };
-
 
 
 const grabeApi = () => {
@@ -141,29 +138,40 @@ const getTimeLabel = () => {
 //         .catch(err => console.log(err));
 // };
 
+
+
+
 const getNewsFromBase = () => {
     makeName();
-    categorysInBase.forEach((oneCategory)=> {
-        state[oneCategory] = [];
+
+    categorysInBase.forEach((nameOfCategory) => {
+        state[nameOfCategory] = [];
     });
 
-bildPromise = categorysInBase.map(oneCategory=>{
-   return base.getDBNews(oneCategory)
-        .then( item => {
-            item.forEach( doc=>{
-                state[oneCategory][state[oneCategory].length] = doc.data();
-            });
+   let bildPromise = categorysInBase.map(nameOfCategory => {
+           base.getDBNews(nameOfCategory)
+                .then(item => {
+                    item.forEach(doc => {
+                        state[nameOfCategory][state[nameOfCategory].length] = doc.data();
+                    });
+                })
+                .catch(err => console.log(err));
+        });
+
+   return Promise.all(bildPromise)
+        .then(rez => {
+            console.log(rez);
+            console.log('достали из базы все категории по 200 новостей');
         })
         .catch(err => console.log(err));
-});
 
-        Promise.all(bildPromise)
-            .then(()=>{
-                console.log('достали из базы все категории по 200 новостей');
-            })
-            .catch(err => console.log(err));
 
 };
+
+
+
+
+
 //
 // const getNewsFromBase = () => {
 //     makeName();

@@ -143,21 +143,45 @@ const getTimeLabel = () => {
 
 const getNewsFromBase = () => {
     makeName();
-    categorysInBase.forEach((oneCategory)=>{
-        state[oneCategory]=[];
-        return base.getDBNews(oneCategory)
-            .then( item => {
-                item.forEach( doc=>{
-                    state[oneCategory][state[oneCategory].length] = doc.data();
-                });
-            })
+    categorysInBase.forEach((oneCategory)=> {
+        state[oneCategory] = [];
+    });
+
+bildPromise = categorysInBase.map(oneCategory=>{
+   return base.getDBNews(oneCategory)
+        .then( item => {
+            item.forEach( doc=>{
+                state[oneCategory][state[oneCategory].length] = doc.data();
+            });
+        })
+        .catch(err => console.log(err));
+});
+
+        Promise.all(bildPromise)
             .then(()=>{
                 console.log('достали из базы все категории по 200 новостей');
             })
             .catch(err => console.log(err));
-    });
 
 };
+//
+// const getNewsFromBase = () => {
+//     makeName();
+//     categorysInBase.forEach((oneCategory)=>{
+//         state[oneCategory]=[];
+//         return base.getDBNews(oneCategory)
+//             .then( item => {
+//                 item.forEach( doc=>{
+//                     state[oneCategory][state[oneCategory].length] = doc.data();
+//                 });
+//             })
+//             .then(()=>{
+//                 console.log('достали из базы все категории по 200 новостей');
+//             })
+//             .catch(err => console.log(err));
+//     });
+//
+// };
 
 getNewsFromBase();
 console.log(state);

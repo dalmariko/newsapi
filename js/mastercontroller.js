@@ -133,18 +133,18 @@ const getIPinfo = () => {
 const getNewsFromBase = () => {
     console.log('достал из базы');
     return base.getDBNews('UAbusiness')
-        .then(( querySnapshot )=> {
-            querySnapshot.forEach((doc)=>{
-                // console.log(`${doc.id} => ${doc.data()}`);
-                state.news[news.length] = doc.data();
+        .then( item => {
+            item.forEach( doc=>{
+              state.news[state.news.length] = doc.data();
             });
         })
         .catch(err => console.log(err));
 };
 
+
 getNewsFromBase();
 
-console.log(state.news);
+
 
 const goNextLoop = () => {
     Promise.all([getNewsFromBase(), getTimeLabel()])

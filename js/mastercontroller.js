@@ -71,6 +71,7 @@ const prepereAllQuerys = ()=> {
     }
 return;
 };
+
 const grabeApi = () => {
 
     prepereAllQuerys();
@@ -89,6 +90,7 @@ const grabeApi = () => {
                 .then(prepareNews => {
                     prepareNews.forEach(news => {
                         // base.saveDBNews(collectionName, news);
+                        console.log(news);
                     });
                     console.log('Новость добавленна в Коллекцию', '\n');
                 })
@@ -99,36 +101,35 @@ const grabeApi = () => {
                 })
             })
     )
-        .catch(err => console.log(err));
+        .catch(err => console.log(err.message));
 
 };
 
-grabeApi();
 
-// const getTimeLabel = () => {
-//     return base.getTimeLebel()
-//         .then(labelS => {
-//             let allLabeles = {
-//                 pullLabels: new Array()
-//             };
-//             labelS.forEach(doc => {
-//                 let oneDoc = {
-//                     dateId: doc.id,
-//                     isGrabe: doc.data().isGrabe,
-//                     timeStemp: doc.data().timeStemp * 1,
-//                 };
-//                 allLabeles.pullLabels.push(oneDoc);
-//             });
-//             return allLabeles;
-//         })
-//         .then(oldTimeS => {
-//             lastTimeUpdateBase = oldTimeS.pullLabels.sort((a, b) => {
-//                 return b.timeStemp - a.timeStemp;
-//             })[0];
-//         })
-//         .catch(err => console.log(err));
-// };
-//
+const getTimeLabel = () => {
+    return base.getTimeLebel()
+        .then(labelS => {
+            let allLabeles = {
+                pullLabels: new Array()
+            };
+            labelS.forEach(doc => {
+                let oneDoc = {
+                    dateId: doc.id,
+                    isGrabe: doc.data().isGrabe,
+                    timeStemp: doc.data().timeStemp * 1,
+                };
+                allLabeles.pullLabels.push(oneDoc);
+            });
+            return allLabeles;
+        })
+        .then(oldTimeS => {
+            lastTimeUpdateBase = oldTimeS.pullLabels.sort((a, b) => {
+                return b.timeStemp - a.timeStemp;
+            })[0];
+        })
+        .catch(err => console.log(err));
+};
+
 // const getIPinfo = () => {
 //     ip.get('http://www.geoplugin.net/json.gp')
 //         .then(response => {
@@ -154,59 +155,63 @@ grabeApi();
 //         })
 //         .catch(err => console.log(err));
 // };
-//
-//
-// const getNewsFromBase = () => {
-//     makeName();
-//
-//     categorysInBase.forEach((nameOfCategory) => {
-//         state[nameOfCategory] = [];
-//     });
-//
-//     return Promise.all(
-//         categorysInBase.map(nameOfCategory => {
-//             return base.getDBNews(nameOfCategory)
-//                 .then(item => {
-//                     item.forEach(doc => {
-//                         state[nameOfCategory][state[nameOfCategory].length] = doc.data();
-//                     });
-//                 })
-//                 .catch(err => console.log(err));
-//         }))
-//         .then( ()=> {
-//             console.log('достали из базы все категории по 200 новостей');
-//         })
-//         .catch(err => console.log(err));
-//
-// };
-//
-//
-// const goNextLoop = () => {
-//     Promise.all([getNewsFromBase(), getTimeLabel()])
-//         .then(timerGo => {
-//             compareLabelTime();
-//         })
-//         .catch(err => console.log(err));
-// };
-//
-// const compareLabelTime = () => {
-//     let handle;
-//     handle = setTimeout(function get() {
-//         let nowTime = Date.now();
-//         if (nowTime - lastTimeUpdateBase.timeStemp > 2400000 && lastTimeUpdateBase.isGrabe === false) {
-//             grabeApi();
-//             base.addTimeLebel({isGrabe: false, timeStemp: Date.now() + ''});
-//             base.setTimeLebel(lastTimeUpdateBase.dateId, {isGrabe: true, timeStemp: lastTimeUpdateBase.timeStemp + ''});
-//             console.log('проверка метки успешна, новая метка добавлена, старая метка изменена');
-//             clearTimeout(handle);
-//             return goNextLoop();
-//         }
-//         console.log('проверяем локально');
-//         console.log('Время сейчас =', nowTime, '|', 'Время последнего обновления = ', lastTimeUpdateBase.timeStemp, '|', nowTime - lastTimeUpdateBase.timeStemp);
-//
-//         handle = setTimeout(get, 1000000);
-//     }, 1000000);
-// };
-//
-// goNextLoop();
+
+
+const getNewsFromBase = () => {
+    makeName();
+
+    categorysInBase.forEach((nameOfCategory) => {
+        state[nameOfCategory] = [];
+    });
+
+    return Promise.all(
+        categorysInBase.map(nameOfCategory => {
+            return base.getDBNews(nameOfCategory)
+                .then(item => {
+                    item.forEach(doc => {
+                        state[nameOfCategory][state[nameOfCategory].length] = doc.data();
+                    });
+                })
+                .catch(err => console.log(err.message));
+        }).reduce((sequene,chapterPromise)=>{
+            return sequene.then(()=>{
+                return chapterPromise;
+            })
+        })
+    )
+        .then( ()=> {
+            console.log('достали из базы все категории по 200 новостей');
+        })
+        .catch(err => console.log(err.message));
+
+};
+
+
+const goNextLoop = () => {
+    Promise.all([getNewsFromBase(), getTimeLabel()])
+        .then(timerGo => {
+            compareLabelTime();
+        })
+        .catch(err => console.log(err.message));
+};
+
+const compareLabelTime = () => {
+    let handle;
+    handle = setTimeout(function get() {
+        let nowTime = Date.now();
+        if (nowTime - lastTimeUpdateBase.timeStemp > 3600000 && lastTimeUpdateBase.isGrabe === false) {
+            grabeApi();
+            base.addTimeLebel({isGrabe: false, timeStemp: Date.now() + ''});
+            base.setTimeLebel(lastTimeUpdateBase.dateId, {isGrabe: true, timeStemp: lastTimeUpdateBase.timeStemp + ''});
+            console.log('проверка метки успешна, новая метка добавлена, старая метка изменена');
+            clearTimeout(handle);
+            return goNextLoop();
+        }
+        console.log('проверяем локально');
+        console.log('Время сейчас =', nowTime, '|', 'Время последнего обновления = ', lastTimeUpdateBase.timeStemp, '|', nowTime - lastTimeUpdateBase.timeStemp);
+        handle = setTimeout(get, 600000);
+    }, 600000);
+};
+
+goNextLoop();
 

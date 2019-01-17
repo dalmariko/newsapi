@@ -4,8 +4,8 @@ const config = {
 
 };
 
-const state={
-    news:[],
+const state = {
+    news: [],
 };
 
 let countrys = ['ua', 'us', 'gb'];
@@ -100,6 +100,10 @@ const getTimeLabel = () => {
         .catch(err => console.log(err));
 };
 
+
+
+
+
 const getIPinfo = () => {
     ip.get('http://www.geoplugin.net/json.gp')
         .then(response => {
@@ -129,17 +133,24 @@ const getIPinfo = () => {
 const getNewsFromBase = () => {
     console.log('достал из базы');
     return base.getDBNews('UAbusiness')
-        .then(newses =>{
-console.log(newses);
-            newses.articles.forEach((news, i) => news._id = i);
-
-    })
+        .then(( querySnapshot )=> {
+            querySnapshot.forEach((doc)=>{
+                // console.log(`${doc.id} => ${doc.data()}`);
+                state.news[news.length] = doc.data();
+            });
+        })
         .catch(err => console.log(err));
 };
 
+getNewsFromBase();
 
-const goNextLoop =()=>{
-    Promise.all([getNewsFromBase(),getTimeLabel()])
+console.log(state.news);
+
+const goNextLoop = () => {
+    Promise.all([getNewsFromBase(), getTimeLabel()])
+        .then(getNewse => {
+            getNewsFromBase();
+        })
         .then(timerGo => {
             compareLabelTime();
         })
@@ -150,19 +161,19 @@ const goNextLoop =()=>{
 
 
 const compareLabelTime = () => {
-let handle;
+    let handle;
     handle = setTimeout(function get() {
         let nowTime = Date.now();
 
-        console.log('Время сейчас =',nowTime,'|','Время последнего обновления = ',lastTimeUpdateBase.timeStemp,'|',nowTime - lastTimeUpdateBase.timeStemp);
+        console.log('Время сейчас =', nowTime, '|', 'Время последнего обновления = ', lastTimeUpdateBase.timeStemp, '|', nowTime - lastTimeUpdateBase.timeStemp);
 
         if (nowTime - lastTimeUpdateBase.timeStemp > 1200000 && lastTimeUpdateBase.isGrabe === false) {
             grabeApi();
             base.addTimeLebel({isGrabe: false, timeStemp: Date.now() + ''});
             base.setTimeLebel(lastTimeUpdateBase.dateId, {isGrabe: true, timeStemp: lastTimeUpdateBase.timeStemp + ''});
             console.log('проверка метки успешна, новая метка добавлена, старая метка изменена');
-         clearTimeout(handle);
-         return goNextLoop();
+            clearTimeout(handle);
+            return goNextLoop();
         }
         console.log(lastTimeUpdateBase);
         console.log('проверяем локально');
@@ -170,4 +181,5 @@ let handle;
     }, 10);
 };
 
-goNextLoop();
+// goNextLoop();
+

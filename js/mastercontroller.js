@@ -112,33 +112,31 @@ const getTimeLabel = () => {
         .catch(err => console.log(err));
 };
 
-// const getIPinfo = () => {
-//     ip.get('http://www.geoplugin.net/json.gp')
-//         .then(response => {
-//             let fresh;
-//             for (let item in response) {
-//                 newIPData = {
-//                     request: response['geoplugin_request'],
-//                     city: response['geoplugin_city'],
-//                     region: response['geoplugin_region'],
-//                     regionCode: response['geoplugin_regionCode'],
-//                     regionName: response['geoplugin_regionName'],
-//                     countryCode: response['geoplugin_countryCode'],
-//                     countryName: response['geoplugin_countryName'],
-//                     continentCode: response['geoplugin_continentCode'],
-//                     latitude: response['geoplugin_latitude'],
-//                     longitude: response['geoplugin_longitude'],
-//                     timezone: response['geoplugin_timezone'],
-//                     currencyCode: response['geoplugin_currencyCode'],
-//                     currencyConverter: response['geoplugin_currencyConverter'],
-//                 }
-//             }
-//             return newIPData;
-//         })
-//         .catch(err => console.log(err));
-// };
-
-
+const getIPinfo = () => {
+    ip.get('http://www.geoplugin.net/json.gp')
+        .then(response => {
+            let fresh;
+            for (let item in response) {
+                newIPData = {
+                    request: response['geoplugin_request'],
+                    city: response['geoplugin_city'],
+                    region: response['geoplugin_region'],
+                    regionCode: response['geoplugin_regionCode'],
+                    regionName: response['geoplugin_regionName'],
+                    countryCode: response['geoplugin_countryCode'],
+                    countryName: response['geoplugin_countryName'],
+                    continentCode: response['geoplugin_continentCode'],
+                    latitude: response['geoplugin_latitude'],
+                    longitude: response['geoplugin_longitude'],
+                    timezone: response['geoplugin_timezone'],
+                    currencyCode: response['geoplugin_currencyCode'],
+                    currencyConverter: response['geoplugin_currencyConverter'],
+                }
+            }
+            return newIPData;
+        })
+        .catch(err => console.log(err));
+};
 
 
 const getNewsFromBase = () => {
@@ -148,28 +146,24 @@ const getNewsFromBase = () => {
         state[nameOfCategory] = [];
     });
 
-   let bildPromise = categorysInBase.map(nameOfCategory => {
-           base.getDBNews(nameOfCategory)
+    return Promise.all(
+        categorysInBase.map(nameOfCategory => {
+            return base.getDBNews(nameOfCategory)
                 .then(item => {
                     item.forEach(doc => {
                         state[nameOfCategory][state[nameOfCategory].length] = doc.data();
                     });
-                })
-                .catch(err => console.log(err));
-        });
-
-   return Promise.all(bildPromise)
-        .then(rez => {
-            console.log(rez);
+                });
+        }))
+        .then((rez) => {
+            rez.forEach(item => {
+                console.log(item, Date.now());
+            });
             console.log('достали из базы все категории по 200 новостей');
         })
         .catch(err => console.log(err));
 
-
 };
-
-
-
 
 
 //
@@ -193,6 +187,7 @@ const getNewsFromBase = () => {
 
 getNewsFromBase();
 console.log(state);
+
 
 const goNextLoop = () => {
     Promise.all([getNewsFromBase(), getTimeLabel()])

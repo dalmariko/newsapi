@@ -6,7 +6,7 @@ const config = {
 const state = {};
 const temporary = {};
 
-let countrys = ['ua','us','au'];
+let countrys = ['us'];
 let categorys = ['business', 'entertainment', 'general', 'health', 'science', 'technology'];
 let categorysInBase = [];
 let queryArreys = [];
@@ -151,7 +151,7 @@ const getNewsFromBase = () => {
 };
 
 const goNextLoop = () => {
-    Promise.all([getNewsFromBase(),getTimeLabel()])
+    Promise.all([getTimeLabel(),getNewsFromBase()])
         .then(timerGo => {
             compareLabelTime();
         })
@@ -170,10 +170,16 @@ const compareLabelTime = () => {
             clearTimeout(handle);
             return goNextLoop();
         }
-        console.log('проверяем локально');
-        console.log('Время сейчас =', nowTime, '|', 'Время последнего обновления = ', lastTimeUpdateBase.timeStemp, '|', nowTime - lastTimeUpdateBase.timeStemp);
+        let date = new Date(lastTimeUpdateBase.timeStemp+3600000);
+        let Y = date.getFullYear();
+        let m = date.getMonth();
+        let D = date.getDay();
+        let h = date.getHours();
+        let i = date.getMinutes();
+        let s = date.getSeconds();
+        console.log(`Обновление Базы новостей поризойдет ${Y}-${m}-${D} ${h}:${i}:${s}, пока проверяем локально.`);
         handle = setTimeout(get, 600000);
-    }, 600000);
+    }, 1000);
 };
 
 goNextLoop();

@@ -1,42 +1,19 @@
 const config = {
     api_url: 'https://newsapi.org/v2',
     api_key: 'ea10580709394a6487ddd7d48952b1f1',
-
 };
 
 const state = {};
+const temporary = {};
 
-let countrys = ['ua', 'us', 'gb','ru'];
+let countrys = ['ua','us','au'];
 let categorys = ['business', 'entertainment', 'general', 'health', 'science', 'technology'];
 let categorysInBase = [];
-let queryArreys=[];
+let queryArreys = [];
 
 const http = new Fetch();
 const base = new DBFirebase();
 const ip = new Fetch();
-
-/*
- UAbusiness
- UAentertainment
- UAgeneral
- UAhealth
- UAscience
- UAtechnology
-
- USbusiness
- USentertainment
- USgeneral
- UShealth
- USscience
- UStechnology
-
- GBbusiness
- GBentertainment
- GBgeneral
- GBhealth
- GBscience
- GBtechnology
- */
 
 let newIPData;
 let lastTimeUpdateBase;
@@ -52,8 +29,7 @@ const makeName = () => {
     }
 };
 
-
-const prepereAllQuerys = ()=> {
+const prepereAllQuerys = () => {
     const makeQuery = (country, category) => {
         return `${config.api_url}/top-headlines?country=${country}&category=${category}&apiKey=${config.api_key}`;
     };
@@ -62,49 +38,42 @@ const prepereAllQuerys = ()=> {
         for (let k = 0; k < categorys.length; k++) {
             let country = countrys[i];
             let category = categorys[k];
-            let collectionName = country.toUpperCase() + category;
-
             let query = makeQuery(country, category);
-
             queryArreys.push(query);
         }
     }
-return;
 };
 
 const grabeApi = () => {
 
     prepereAllQuerys();
+    makeName();
 
     Promise.all(
         queryArreys.map(oneQuery => {
             return http.get(oneQuery)
                 .then(res => {
-                    let temp = new Array();
-                    res.articles.forEach((news) => {
-                        news.id = SHA256(Date.now() + news.title);
-                        temp.push(news);
+                    categorysInBase.forEach((nameOfCategory) => {
+                        temporary[nameOfCategory] = [];
+                        res.articles.forEach((news) => {
+                            news.id = SHA256(Date.now() + news.title);
+                            temporary[nameOfCategory].push(news);
+                        });
                     });
-                    return temp;
                 })
-                .then(prepareNews => {
-                    prepareNews.forEach(news => {
-                        // base.saveDBNews(collectionName, news);
-                        console.log(news);
-                    });
-                    console.log('Новость добавленна в Коллекцию', '\n');
-                })
-                .catch(err => console.log(err.message));
-        }).reduce((sequence, chapterPromise) => {
-                return sequence.then(() => {
-                    return chapterPromise;
-                })
-            })
-    )
+        })
+    ).then(() => {
+        for (categorysInBase in temporary) {
+            Promise.all(temporary[categorysInBase].map(news=>{
+                    base.saveDBNews(categorysInBase, news);
+                }
+            )).catch(err => console.log(err.message));
+            console.log(categorysInBase, 'Полностью завершина', '\n');
+        }
+    })
         .catch(err => console.log(err.message));
 
 };
-
 
 const getTimeLabel = () => {
     return base.getTimeLebel()
@@ -156,7 +125,6 @@ const getTimeLabel = () => {
 //         .catch(err => console.log(err));
 // };
 
-
 const getNewsFromBase = () => {
     makeName();
 
@@ -173,22 +141,17 @@ const getNewsFromBase = () => {
                     });
                 })
                 .catch(err => console.log(err.message));
-        }).reduce((sequene,chapterPromise)=>{
-            return sequene.then(()=>{
-                return chapterPromise;
-            })
         })
     )
-        .then( ()=> {
+        .then(() => {
             console.log('достали из базы все категории по 200 новостей');
         })
         .catch(err => console.log(err.message));
 
 };
 
-
 const goNextLoop = () => {
-    Promise.all([getNewsFromBase(), getTimeLabel()])
+    Promise.all([getNewsFromBase(),getTimeLabel()])
         .then(timerGo => {
             compareLabelTime();
         })

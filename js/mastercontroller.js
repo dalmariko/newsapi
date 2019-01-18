@@ -6,7 +6,8 @@ const config = {
 const state = {};
 const temporary = {};
 
-let countrys = ['us'];
+// let countrys = ['us','ua','ru','au','fr','cu','gr','de','il','jp','ie','it','no','ch','gb'];
+let countrys = ['ua','ru'];
 let categorys = ['business', 'entertainment', 'general', 'health', 'science', 'technology'];
 let categorysInBase = [];
 let queryArreys = [];
@@ -66,6 +67,7 @@ const grabeApi = () => {
         for (categorysInBase in temporary) {
             Promise.all(temporary[categorysInBase].map(news=>{
                     base.saveDBNews(categorysInBase, news);
+                console.log(categorysInBase, 'новость собрана и залита ', Date.now(),'\n');
                 }
             )).catch(err => console.log(err.message));
             console.log(categorysInBase, 'Полностью завершина', '\n');
@@ -74,6 +76,7 @@ const grabeApi = () => {
         .catch(err => console.log(err.message));
 
 };
+
 
 const getTimeLabel = () => {
     return base.getTimeLebel()

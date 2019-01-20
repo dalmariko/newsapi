@@ -3,6 +3,10 @@ const ui = new UI();
 
 
 
+
+
+
+
 ui.selectCountry.addEventListener('click', e => {
 
     let countrys = document.getElementById('countrys');
@@ -56,12 +60,19 @@ ui.newsContainer.addEventListener('click', e => {
     }
 });
 
-var stepTime = 20;
-var docBody = document.body;
-var focElem = document.documentElement;
 
-var scrollAnimationStep = function (initPos, stepAmount) {
-    var newPos = initPos - stepAmount > 0 ? initPos - stepAmount : 0;
+
+
+
+
+
+
+let stepTime = 20;
+let docBody = document.body;
+let focElem = document.documentElement;
+
+let scrollAnimationStep = function (initPos, stepAmount) {
+    let newPos = initPos - stepAmount > 0 ? initPos - stepAmount : 0;
 
     docBody.scrollTop = focElem.scrollTop = newPos;
 
@@ -70,9 +81,9 @@ var scrollAnimationStep = function (initPos, stepAmount) {
     }, stepTime);
 };
 
-var scrollTopAnimated = function (speed) {
-    var topOffset = docBody.scrollTop || focElem.scrollTop;
-    var stepAmount = topOffset;
+let scrollTopAnimated = function (speed) {
+    let topOffset = docBody.scrollTop || focElem.scrollTop;
+    let stepAmount = topOffset;
 
     speed && (stepAmount = (topOffset * stepTime)/speed);
 

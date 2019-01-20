@@ -4,7 +4,7 @@ class DBFirebase{
     }
 
     getDBNews(collectionName){
-      return db.collection(collectionName).orderBy("publishedAt", "desc").limit(200).get();
+      return db.collection(collectionName).orderBy("publishedAt", "desc").limit(10).get();
     }
 
 

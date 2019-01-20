@@ -31,9 +31,6 @@ const makeName = () => {
 };
 
 const prepereAllQuerys = () => {
-    const makeQuery = (country, category) => {
-        return `${config.api_url}/top-headlines?country=${country}&category=${category}&apiKey=${config.api_key}`;
-    };
 
     for (let i = 0; i < countrys.length; i++) {
         for (let k = 0; k < categorys.length; k++) {
@@ -45,25 +42,36 @@ const prepereAllQuerys = () => {
     }
 };
 
+const makeQuery = (country, category) => {
+    return `${config.api_url}/top-headlines?country=${country}&category=${category}&apiKey=${config.api_key}`;
+};
+
+
 const grabeApi = () => {
 
-    prepereAllQuerys();
-    makeName();
 
-    Promise.all(
-        queryArreys.map(oneQuery => {
-            return http.get(oneQuery)
-                .then(res => {
-                    categorysInBase.forEach((nameOfCategory) => {
-                        temporary[nameOfCategory] = [];
-                        res.articles.forEach((news) => {
-                            news.id = SHA256(Date.now() + news.title);
-                            temporary[nameOfCategory].push(news);
-                        });
-                    });
+    let allGETpromises=[];
+
+    for (county in countrys) {
+        for (category in categorys) {
+           let query = makeQuery(countrys[county], categorys[category]);
+            let collectionName = countrys[county].toUpperCase() + categorys[category];
+           allGETpromises.push(
+                http.get( query )
+                    .then(res => {
+                    temporary[collectionName] = [];
+                    res.articles.forEach(news => {
+                        news.id = SHA256(Date.now() + news.title);
+                        temporary[collectionName].push(news);
+                    })
                 })
-        })
-    ).then(() => {
+                    .catch(err => console.log(err.message))
+            );
+        }
+    }
+
+    Promise.all(allGETpromises)
+     .then(() => {
         for (categorysInBase in temporary) {
             Promise.all(temporary[categorysInBase].map(news=>{
                     base.saveDBNews(categorysInBase, news);
@@ -72,12 +80,15 @@ const grabeApi = () => {
 
             console.log(categorysInBase, 'Полностью завершина', '\n');
         }
-    }).then(()=>{
+    })
+     .then(() => {
         temporary = {};
     })
         .catch(err => console.log(err.message));
 
 };
+
+grabeApi();
 
 const getTimeLabel = () => {
     return base.getTimeLebel()
@@ -148,7 +159,12 @@ const getNewsFromBase = () => {
         })
     )
         .then(() => {
-            console.log('достали из базы все категории по 200 новостей');
+            console.log('достали из базы все категории по 10 новостей');
+        })
+        .then(() => {
+            state['UAgeneral'].forEach(news=>{
+                ui.addNews(news);
+            })
         })
         .catch(err => console.log(err.message));
 
@@ -193,5 +209,5 @@ const compareLabelTime = () => {
     }, 10);
 };
 
-goNextLoop();
+// goNextLoop();
 

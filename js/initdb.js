@@ -14,12 +14,19 @@ const firebaseConfig = {
     // messagingSenderId: "1082484240233"
 
 
-    apiKey: "AIzaSyAc-BppSV1ckVAn5or8yjtTcCDxspcPKh0",
-    authDomain: "testpromises.firebaseapp.com",
-    databaseURL: "https://testpromises.firebaseio.com",
-    projectId: "testpromises",
-    storageBucket: "testpromises.appspot.com",
-    messagingSenderId: "915131080184"
+    // apiKey: "AIzaSyAc-BppSV1ckVAn5or8yjtTcCDxspcPKh0",
+    // authDomain: "testpromises.firebaseapp.com",
+    // databaseURL: "https://testpromises.firebaseio.com",
+    // projectId: "testpromises",
+    // storageBucket: "testpromises.appspot.com",
+    // messagingSenderId: "915131080184"
+
+    apiKey: "AIzaSyCC_PI7KwuYzNT4pmbdYw1nL1sayt-9T5A",
+    authDomain: "mymegapress.firebaseapp.com",
+    databaseURL: "https://mymegapress.firebaseio.com",
+    projectId: "mymegapress",
+    storageBucket: "mymegapress.appspot.com",
+    messagingSenderId: "55838716029"
 
 };
 firebase.initializeApp(firebaseConfig);

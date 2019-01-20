@@ -6,9 +6,9 @@ const config = {
 const state = {};
 const temporary = {};
 
-// let countrys = ['us','ua','ru','au','fr','cu','gr','de','il','jp','ie','it','no','ch','gb'];
-let countrys = ['ua','ru'];
-let categorys = ['business', 'entertainment', 'general', 'health', 'science', 'technology'];
+const countrys = ['us','ua','fr','de'];
+const categorys = ['business', 'entertainment', 'general', 'health', 'science', 'technology'];
+
 let categorysInBase = [];
 let queryArreys = [];
 
@@ -67,16 +67,15 @@ const grabeApi = () => {
         for (categorysInBase in temporary) {
             Promise.all(temporary[categorysInBase].map(news=>{
                     base.saveDBNews(categorysInBase, news);
-                console.log(categorysInBase, 'новость собрана и залита ', Date.now(),'\n');
                 }
             )).catch(err => console.log(err.message));
+
             console.log(categorysInBase, 'Полностью завершина', '\n');
         }
     })
         .catch(err => console.log(err.message));
 
 };
-
 
 const getTimeLabel = () => {
     return base.getTimeLebel()
@@ -181,8 +180,8 @@ const compareLabelTime = () => {
         let i = date.getMinutes();
         let s = date.getSeconds();
         console.log(`Обновление Базы новостей поризойдет ${Y}-${m}-${D} ${h}:${i}:${s}, пока проверяем локально.`);
-        handle = setTimeout(get, 600000);
-    }, 1000);
+        handle = setTimeout(get, 180000);
+    }, 10);
 };
 
 goNextLoop();

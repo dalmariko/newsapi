@@ -4,7 +4,7 @@ const config = {
 };
 
 const state = {};
-const temporary = {};
+let temporary = {};
 
 const countrys = ['us','ua','fr','de'];
 const categorys = ['business', 'entertainment', 'general', 'health', 'science', 'technology'];
@@ -72,6 +72,8 @@ const grabeApi = () => {
 
             console.log(categorysInBase, 'Полностью завершина', '\n');
         }
+    }).then(()=>{
+        temporary = {};
     })
         .catch(err => console.log(err.message));
 
@@ -164,7 +166,7 @@ const compareLabelTime = () => {
     let handle;
     handle = setTimeout(function get() {
         let nowTime = Date.now();
-        if (nowTime - lastTimeUpdateBase.timeStemp > 3600000 && lastTimeUpdateBase.isGrabe === false) {
+        if (nowTime - lastTimeUpdateBase.timeStemp > 7200000 && lastTimeUpdateBase.isGrabe === false) {
             grabeApi();
             base.addTimeLebel({isGrabe: false, timeStemp: Date.now() + ''});
             base.setTimeLebel(lastTimeUpdateBase.dateId, {isGrabe: true, timeStemp: lastTimeUpdateBase.timeStemp + ''});
@@ -172,15 +174,22 @@ const compareLabelTime = () => {
             clearTimeout(handle);
             return goNextLoop();
         }
-        let date = new Date(lastTimeUpdateBase.timeStemp+3600000);
-        let Y = date.getFullYear();
-        let m = date.getMonth();
-        let D = date.getDay();
-        let h = date.getHours();
-        let i = date.getMinutes();
-        let s = date.getSeconds();
-        console.log(`Обновление Базы новостей поризойдет ${Y}-${m}-${D} ${h}:${i}:${s}, пока проверяем локально.`);
-        handle = setTimeout(get, 180000);
+        let date = new Date(lastTimeUpdateBase.timeStemp+7200000);
+        let options = {
+            era: 'short',
+            year: 'numeric',
+            month: 'short',
+            day: 'numeric',
+            weekday: 'long',
+            timezone: 'short',
+            hour: 'numeric',
+            minute: 'numeric',
+            second: 'numeric'
+        };
+        let lng = navigator.browserLanguage || navigator.language || navigator.userLanguage;
+
+        console.log(`Обновление Базы новостей поризойдет: - "${date.toLocaleString(`${lng}`,options)}", пока проверяем локально.`);
+        handle = setTimeout(get, 7200000);
     }, 10);
 };
 

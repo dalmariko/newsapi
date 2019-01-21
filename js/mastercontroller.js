@@ -4,7 +4,9 @@ const config = {
 };
 
 const state = {};
-let temporary = {};
+const TIMEUPDATE=7200000;
+
+
 
 const countrys = ['us','ua','fr','de'];
 const categorys = ['business', 'entertainment', 'general', 'health', 'science', 'technology'];
@@ -62,7 +64,7 @@ const grabeApi = () => {
                     temporary[collectionName] = [];
                     res.articles.forEach(news => {
                         news.id = SHA256(Date.now() + news.title);
-                        temporary[collectionName].push(news);
+                        base.saveDBNews(collectionName, news);
                     })
                 })
                     .catch(err => console.log(err.message))
@@ -71,24 +73,10 @@ const grabeApi = () => {
     }
 
     Promise.all(allGETpromises)
-     .then(() => {
-        for (categorysInBase in temporary) {
-            Promise.all(temporary[categorysInBase].map(news=>{
-                    base.saveDBNews(categorysInBase, news);
-                }
-            )).catch(err => console.log(err.message));
-
-            console.log(categorysInBase, 'Полностью завершина', '\n');
-        }
-    })
-     .then(() => {
-        temporary = {};
-    })
+        .then(()=>{console.log('свежие новости полученны и сохранены')})
         .catch(err => console.log(err.message));
 
 };
-
-grabeApi();
 
 const getTimeLabel = () => {
     return base.getTimeLebel()
@@ -143,12 +131,12 @@ const getTimeLabel = () => {
 const getNewsFromBase = () => {
     makeName();
 
-    categorysInBase.forEach((nameOfCategory) => {
+    categorysInBase.forEach( nameOfCategory => {
         state[nameOfCategory] = [];
     });
 
     return Promise.all(
-        categorysInBase.map(nameOfCategory => {
+        categorysInBase.map( nameOfCategory => {
             return base.getDBNews(nameOfCategory)
                 .then(item => {
                     item.forEach(doc => {
@@ -159,7 +147,7 @@ const getNewsFromBase = () => {
         })
     )
         .then(() => {
-            console.log('достали из базы все категории по 10 новостей');
+            console.log('достали из базы все категории по 200 новостей максимум за раз');
         })
         .then(() => {
             state['UAgeneral'].forEach(news=>{
@@ -182,7 +170,7 @@ const compareLabelTime = () => {
     let handle;
     handle = setTimeout(function get() {
         let nowTime = Date.now();
-        if (nowTime - lastTimeUpdateBase.timeStemp > 7200000 && lastTimeUpdateBase.isGrabe === false) {
+        if (nowTime - lastTimeUpdateBase.timeStemp > TIMEUPDATE && lastTimeUpdateBase.isGrabe === false) {
             grabeApi();
             base.addTimeLebel({isGrabe: false, timeStemp: Date.now() + ''});
             base.setTimeLebel(lastTimeUpdateBase.dateId, {isGrabe: true, timeStemp: lastTimeUpdateBase.timeStemp + ''});
@@ -190,7 +178,7 @@ const compareLabelTime = () => {
             clearTimeout(handle);
             return goNextLoop();
         }
-        let date = new Date(lastTimeUpdateBase.timeStemp+7200000);
+        let date = new Date(lastTimeUpdateBase.timeStemp+TIMEUPDATE);
         let options = {
             era: 'short',
             year: 'numeric',
@@ -205,9 +193,9 @@ const compareLabelTime = () => {
         let lng = navigator.browserLanguage || navigator.language || navigator.userLanguage;
 
         console.log(`Обновление Базы новостей поризойдет: - "${date.toLocaleString(`${lng}`,options)}", пока проверяем локально.`);
-        handle = setTimeout(get, 7200000);
+        handle = setTimeout(get, TIMEUPDATE);
     }, 10);
 };
 
-// goNextLoop();
+goNextLoop();
 

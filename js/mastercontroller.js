@@ -61,7 +61,6 @@ const grabeApi = () => {
            allGETpromises.push(
                 http.get( query )
                     .then(res => {
-                    temporary[collectionName] = [];
                     res.articles.forEach(news => {
                         news.id = SHA256(Date.now() + news.title);
                         base.saveDBNews(collectionName, news);
@@ -150,9 +149,17 @@ const getNewsFromBase = () => {
             console.log('достали из базы все категории по 200 новостей максимум за раз');
         })
         .then(() => {
-            state['UAgeneral'].forEach(news=>{
+            return state['USentertainment'].map(news => {
                 ui.addNews(news);
             })
+                .reduce((secuence, chapterPromis) => {
+                    return secuence
+                        .then(() => {
+                            return chapterPromis;
+                        }).then(chapter => {
+                            return chapter;
+                        });
+                }, Promise.resolve());
         })
         .catch(err => console.log(err.message));
 
@@ -198,4 +205,3 @@ const compareLabelTime = () => {
 };
 
 goNextLoop();
-

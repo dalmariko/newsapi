@@ -1,11 +1,8 @@
 
 const ui = new UI();
 
-
-
-
-
-
+let country;
+let category;
 
 ui.selectCountry.addEventListener('click', e => {
 
@@ -13,20 +10,24 @@ ui.selectCountry.addEventListener('click', e => {
     countrys.addEventListener('click', (e) => {
 
         country = e.target.dataset.country;
-        const getQuery = `${config.api_url}/top-headlines?country=${country}&apiKey=${config.api_key}`;
-        const http = new Fetch();
-        http.getAPINews(getQuery)
-            .then( res => {
-
-            ui.clearContainer();
-            res.articles.forEach((news, i) => news._id = i);
-
-            state.news = res.articles;
-            res.articles.forEach((news) => {
-                ui.addNews(news)
-            });
-
-        });
+        for (place in state) {
+            let nameofCounty = place.substr(0, 2);
+            if (nameofCounty === country.toUpperCase()) {
+                let ferstCategoryShow = nameofCounty + 'general';
+                ui.clearContainer();
+               return state[ferstCategoryShow].map(news => {
+                    ui.addNews(news);
+                }).reduce((sequence,chapterPromis)=>{
+                   return sequence
+                       .then(()=> {
+                           return chapterPromis
+                       })
+                       .then(chapter=>{
+                           return chapter;
+                           })
+               },Promise.resolve())
+            }
+        }
     });
 });
 
@@ -36,21 +37,25 @@ ui.selectCategorys.addEventListener('click', e => {
 
         category = e.target.dataset.category;
 
-        const getQuery = `${config.api_url}/top-headlines?country=${country}&category=${category}&apiKey=${config.api_key}`;
-        const http = new Fetch();
-        http.getAPINews(getQuery)
-            .then( res => {
-
-            ui.clearContainer();
-            res.articles.forEach((news, i) => news._id = i);
-
-            state.news = res.articles;
-            res.articles.forEach((news) => {
-                ui.addNews(news)
-            });
+        for (place in state) {
+            let nameofCounty = place.substr(0, 2);
+            if (nameofCounty === country.toUpperCase()) {
+                let ferstCategoryShow = nameofCounty + category;
+                ui.clearContainer();
+                return state[ferstCategoryShow].map(news => {
+                    ui.addNews(news);
+                }).reduce((sequence,chapterPromis)=>{
+                    return sequence
+                        .then(()=> {
+                            return chapterPromis
+                        })
+                        .then(chapter=>{
+                            return chapter;
+                        })
+                },Promise.resolve())
+            }
+        }
         });
-
-    });
 });
 
 ui.newsContainer.addEventListener('click', e => {
@@ -59,12 +64,6 @@ ui.newsContainer.addEventListener('click', e => {
         favorites.save(state.news[id]);
     }
 });
-
-
-
-
-
-
 
 
 let stepTime = 20;

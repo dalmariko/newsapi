@@ -149,7 +149,7 @@ const getNewsFromBase = () => {
             console.log('достали из базы все категории по 200 новостей максимум за раз');
         })
         .then(() => {
-            return state['USentertainment'].map(news => {
+            return state['UAgeneral'].map(news => {
                 ui.addNews(news);
             })
                 .reduce((secuence, chapterPromis) => {

@@ -1,8 +1,8 @@
 
 const ui = new UI();
 
-let country;
-let category;
+let country ='ua';
+let category = 'general';
 
 ui.selectCountry.addEventListener('click', e => {
 

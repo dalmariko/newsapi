@@ -12,21 +12,15 @@ let lastTimeUpdateBase = '';
 let categorysInBase = [];
 let queryArreys = [];
 
-// const TIMEUPDATE=7200000;
-const TIMEUPDATE = 1800000;
+const TIMEUPDATE=7200000;
 
-// const categorys = ['business', 'entertainment', 'general', 'health', 'science', 'technology'];
-// const countrys = ['us','ua','fr','de','ca','cu','no','se'];
+const categorys = ['business', 'entertainment', 'general', 'health', 'science', 'technology'];
+const countrys = ['us','ua','fr','de','ca','cu','no','se','ch'];
 
-const countrys = ['ua'];
-const categorys = ['general','business'];
 
 const http = new Fetch();
 const base = new DBFirebase();
 const ip = new Fetch();
-
-// 'https://newsapi.org/v2/top-headlines?country=ua&category=general&apiKey=ea10580709394a6487ddd7d48952b1f1'
-
 
 
 const makeName = () => {
@@ -64,10 +58,10 @@ const getNewsFromBase = () => {
             })
         )
             .then(() => {
+                ui.clearContainer();
                 console.log('достали из базы все категории по 200 новостей максимум за раз');
             })
             .then(() => {
-                ui.clearContainer();
                 return state['UAgeneral'].map(news => {
                     ui.addNews(news);
                 }).reduce((secuence, chapterPromis) => {
@@ -147,7 +141,7 @@ const compareTimeLabel = () => {
 
     if (nowTime - lastTimeUpdateBase.timeStemp > TIMEUPDATE && lastTimeUpdateBase.isGrabe === false){
             runInOrder([changeTimeLabel,grabeApi,go]).then(()=>{
-                console.log('новая метка добавлена, старая метка изменена,\n Данные обновлены');
+                console.log('новая метка добавлена, старая метка изменена, Данные обновлены');
             })
                 .catch(err=>console.log(err.message));
     }

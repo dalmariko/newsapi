@@ -51,9 +51,9 @@ const getNewsFromBase = () => {
         });
 
         return Promise.all(
-            categorysInBase.map(nameOfCategory => {
+            categorysInBase.map( nameOfCategory => {
                 return base.getDBNews(nameOfCategory)
-                    .then(item => {
+                    .then( item => {
                         item.forEach(doc => {
                             state[nameOfCategory][state[nameOfCategory].length] = doc.data();
                         });
@@ -68,8 +68,7 @@ const getNewsFromBase = () => {
                 ui.clearContainer();
                 return state['UAgeneral'].map(news => {
                     ui.addNews(news);
-                })
-                    .reduce((secuence, chapterPromis) => {
+                }).reduce((secuence, chapterPromis) => {
                         return secuence
                             .then(() => {
                                 return chapterPromis;
@@ -165,12 +164,11 @@ const compareTimeLabel = () => {
 
     let nowTime = Date.now();
 
-    if (nowTime - lastTimeUpdateBase.timeStemp > TIMEUPDATE && lastTimeUpdateBase.isGrabe === false) {
-        grabeApi();
-        base.addTimeLebel({isGrabe: false, timeStemp: Date.now() + ''});
-        base.setTimeLebel(lastTimeUpdateBase.dateId, {isGrabe: true, timeStemp: lastTimeUpdateBase.timeStemp + ''});
-        console.log('новая метка добавлена, старая метка изменена');
-        getNewsFromBase();
+    if (nowTime - lastTimeUpdateBase.timeStemp > TIMEUPDATE && lastTimeUpdateBase.isGrabe === false){
+            base.addTimeLebel({isGrabe: false, timeStemp: Date.now() + ''});
+            base.setTimeLebel(lastTimeUpdateBase.dateId, {isGrabe: true, timeStemp: lastTimeUpdateBase.timeStemp + ''});
+            console.log('новая метка добавлена, старая метка изменена');
+       get();
     }
 
         let date = new Date(lastTimeUpdateBase.timeStemp + TIMEUPDATE);
@@ -190,21 +188,24 @@ const compareTimeLabel = () => {
 
 };
 
+// Object.keys(state).length!=0?console.log('state не пустой !!!!!!'):getNewsFromBase();
+const get=()=>{
+        Promise.resolve(getTimeLabel())
+            .then(() => {
+                return getNewsFromBase();
+            })
+            .then(() => {
+                return compareTimeLabel();
+            })
+            .catch(err => {
+                console.log(err.message)
+            });
+        // handle = setTimeout(get, TIMEUPDATE);
+};
 
 let handle;
-handle = setTimeout(function get() {
-    Promise.resolve(getTimeLabel())
-        .then(() => {
-          // Object.keys(state).length!=0?console.log('state не пустой !!!!!!'):getNewsFromBase();
-          return getNewsFromBase();
-    })
-        .then(() => {
-          return compareTimeLabel();
-    })
-        .catch(err => {
-            console.log(err.message)
-        });
-    handle = setTimeout(get, TIMEUPDATE);
-}, 10);
+handle = setTimeout(get, 10);
+
+
 
 

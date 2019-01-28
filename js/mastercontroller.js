@@ -4,28 +4,30 @@ const config = {
 };
 
 let state = {};
+let handle;
 
-// const TIMEUPDATE=7200000;
-const TIMEUPDATE = 1800000;
-
-const categorys = ['business', 'entertainment', 'general', 'health', 'science', 'technology'];
-// const countrys = ['us','ua','fr','de','ca','cu','no','se'];
-const countrys = ['ua'];
-// const categorys = ['general'];
+let newIPData;
+let lastTimeUpdateBase = '';
 
 let categorysInBase = [];
 let queryArreys = [];
 
+// const TIMEUPDATE=7200000;
+const TIMEUPDATE = 1800000;
 
+// const categorys = ['business', 'entertainment', 'general', 'health', 'science', 'technology'];
+// const countrys = ['us','ua','fr','de','ca','cu','no','se'];
+
+const countrys = ['ua'];
+const categorys = ['general','business'];
 
 const http = new Fetch();
 const base = new DBFirebase();
 const ip = new Fetch();
 
-// 'https://newsapi.org/v2/top-headlines?country=ru&category=general&apiKey=ea10580709394a6487ddd7d48952b1f1'
+// 'https://newsapi.org/v2/top-headlines?country=ua&category=general&apiKey=ea10580709394a6487ddd7d48952b1f1'
 
-let newIPData;
-let lastTimeUpdateBase = '';
+
 
 const makeName = () => {
     for (let i = 0; i < countrys.length; i++) {
@@ -134,6 +136,60 @@ const getTimeLabel = () => {
         .catch(err => console.log(err));
 };
 
+const changeTimeLabel =() =>{
+    base.addTimeLebel({isGrabe: false, timeStemp: Date.now() + ''});
+    base.setTimeLebel(lastTimeUpdateBase.dateId, {isGrabe: true, timeStemp: lastTimeUpdateBase.timeStemp + ''});
+};
+
+const compareTimeLabel = () => {
+
+    let nowTime = Date.now();
+
+    if (nowTime - lastTimeUpdateBase.timeStemp > TIMEUPDATE && lastTimeUpdateBase.isGrabe === false){
+            runInOrder([changeTimeLabel,grabeApi,go]).then(()=>{
+                console.log('новая метка добавлена, старая метка изменена,\n Данные обновлены');
+            })
+                .catch(err=>console.log(err.message));
+    }
+
+        let date = new Date(lastTimeUpdateBase.timeStemp + TIMEUPDATE);
+        let options = {
+            era: 'short',
+            year: 'numeric',
+            month: 'short',
+            day: 'numeric',
+            weekday: 'long',
+            timezone: 'short',
+            hour: 'numeric',
+            minute: 'numeric',
+            second: 'numeric'
+        };
+        let lng = navigator.browserLanguage || navigator.language || navigator.userLanguage;
+        console.log(`Обновление Базы новостей поризойдет: - "${date.toLocaleString(`${lng}`, options)}", пока проверяем локально.`);
+
+};
+
+const runInOrder = array=>{
+    return array.reduce((ferst,next)=> {
+        return ferst.then(() => {
+            return next()
+        });
+    },Promise.resolve());
+ };
+
+
+// Object.keys(state).length!=0?console.log('state не пустой !!!!!!'):getNewsFromBase();
+const go=()=>{
+runInOrder([getTimeLabel,getNewsFromBase,compareTimeLabel])
+    .then(()=>{handle = setTimeout(go, TIMEUPDATE);})
+    .catch(err=>console.log(err.message));
+};
+
+
+handle = setTimeout(go, 10);
+
+
+
 // const getIPinfo = () => {
 //     ip.get('http://www.geoplugin.net/json.gp')
 //         .then(response => {
@@ -159,53 +215,3 @@ const getTimeLabel = () => {
 //         })
 //         .catch(err => console.log(err));
 // };
-
-const compareTimeLabel = () => {
-
-    let nowTime = Date.now();
-
-    if (nowTime - lastTimeUpdateBase.timeStemp > TIMEUPDATE && lastTimeUpdateBase.isGrabe === false){
-            base.addTimeLebel({isGrabe: false, timeStemp: Date.now() + ''});
-            base.setTimeLebel(lastTimeUpdateBase.dateId, {isGrabe: true, timeStemp: lastTimeUpdateBase.timeStemp + ''});
-            console.log('новая метка добавлена, старая метка изменена');
-       get();
-    }
-
-        let date = new Date(lastTimeUpdateBase.timeStemp + TIMEUPDATE);
-        let options = {
-            era: 'short',
-            year: 'numeric',
-            month: 'short',
-            day: 'numeric',
-            weekday: 'long',
-            timezone: 'short',
-            hour: 'numeric',
-            minute: 'numeric',
-            second: 'numeric'
-        };
-        let lng = navigator.browserLanguage || navigator.language || navigator.userLanguage;
-        console.log(`Обновление Базы новостей поризойдет: - "${date.toLocaleString(`${lng}`, options)}", пока проверяем локально.`);
-
-};
-
-// Object.keys(state).length!=0?console.log('state не пустой !!!!!!'):getNewsFromBase();
-const get=()=>{
-        Promise.resolve(getTimeLabel())
-            .then(() => {
-                return getNewsFromBase();
-            })
-            .then(() => {
-                return compareTimeLabel();
-            })
-            .catch(err => {
-                console.log(err.message)
-            });
-        // handle = setTimeout(get, TIMEUPDATE);
-};
-
-let handle;
-handle = setTimeout(get, 10);
-
-
-
-

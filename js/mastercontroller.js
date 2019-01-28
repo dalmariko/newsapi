@@ -12,10 +12,11 @@ let lastTimeUpdateBase = '';
 let categorysInBase = [];
 let queryArreys = [];
 
-const TIMEUPDATE=7200000;
+const TIMEUPDATE=31320000;
 
 const categorys = ['business', 'entertainment', 'general', 'health', 'science', 'technology'];
-const countrys = ['us','ua','fr','de','ca','cu','no','se','ch'];
+// const countrys = ['us','ua','fr','de','ca','cu','no','se','ch'];
+const countrys = ['us','ua','ca'];
 
 
 const http = new Fetch();

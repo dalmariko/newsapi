@@ -12,11 +12,10 @@ let lastTimeUpdateBase = '';
 let categorysInBase = [];
 let queryArreys = [];
 
-const TIMEUPDATE=31320000;
+const TIMEUPDATE=43200000;
 
+const countrys = ['ua','ca'];
 const categorys = ['business', 'entertainment', 'general', 'health', 'science', 'technology'];
-// const countrys = ['us','ua','fr','de','ca','cu','no','se','ch'];
-const countrys = ['us','ua','ca'];
 
 
 const http = new Fetch();
@@ -174,6 +173,7 @@ const runInOrder = array=>{
 
 
 // Object.keys(state).length!=0?console.log('state не пустой !!!!!!'):getNewsFromBase();
+
 const go=()=>{
 runInOrder([getTimeLabel,getNewsFromBase,compareTimeLabel])
     .then(()=>{handle = setTimeout(go, TIMEUPDATE);})

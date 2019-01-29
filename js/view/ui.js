@@ -25,7 +25,6 @@ class UI {
         </div>
       </div>
     </div>
-           
 `;
         this.newsContainer.insertAdjacentHTML('beforeend', template);
     }

@@ -1,27 +1,58 @@
- class Pagination {
+class Pagination {
+
+    constructor() {
+        this.paginationContainer = document.querySelector('.paginateBox .pagination');
+        this.activePage = document.querySelector('.pagination .active');
+        this.disableMarck = document.querySelector('.pagination .disabled');
+    }
 
     //взять страницу
-    getPage(){}
+    getPage() {
+        //todo написать, функциб по взятию клика произведенного на кнопке со страницами
+    }
 
     //один шаг
-    oneStep(){}
+    oneStep() {
+        //todo описать функцию по переходу на следующую паритию новостей на один шаг вперед.
+    }
 
     //пять шагов
-    fiveStep(){}
+    fiveStep() {
+        //todo описать функцию по переходу на следующую паритию новостей на пять шаго вперед.
+    }
 
     //в начало
-    home(){}
+    home() {
+        //todo описать функцию по переходу в начало (свежие новости)
+    }
 
     //в конец
-    last(){}
+    last() {
+        //todo описать функцию по переходу в конец (чамые старые новости)
+    }
 
     // скрыть пагинацию
-    hidePaginatePanel(){}
+    hidePaginatePanel() {
+        //todo описать функцию по скрытию пгинации.
+        this.paginationContainer
+    }
 
     //показать панель пагинации
-    showPaginatePanel(){}
+    showPaginatePanel() {
+        const template = `
+        <li class="disabled"><a href="#!"><i class="material-icons">chevron_left</i></a></li>
+            <li class="active"><a href="#!">1</a></li>
+            <li class="waves-effect"><a href="#!">2</a></li>
+            <li class="waves-effect"><a href="#!">3</a></li>
+            <li class="waves-effect"><a href="#!">4</a></li>
+            <li class="waves-effect"><a href="#!">5</a></li>
+        <li class="waves-effect"><a href="#!"><i class="material-icons">chevron_right</i></a></li>
+`;
+        this.paginationContainer.insertAdjacentHTML('afterbegin',template);
+    }
 
     //запомнить страницу
-    rememberPage(){}
+    rememberPage() {
+    }
 
 }

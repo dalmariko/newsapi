@@ -1,11 +1,12 @@
 const firebaseConfig = {
-    apiKey: "AIzaSyBY0oKVNpqZPw4gnqDzGA14TujAe68beuo",
-    authDomain: "superpupermegapress.firebaseapp.com",
-    databaseURL: "https://superpupermegapress.firebaseio.com",
-    projectId: "superpupermegapress",
-    storageBucket: "superpupermegapress.appspot.com",
-    messagingSenderId: "858725543193"
+    apiKey: "AIzaSyAznFTYsXFPEJFVrLZl7GQBsxw6B84vdrY",
+    authDomain: "enotwhynot.firebaseapp.com",
+    databaseURL: "https://enotwhynot.firebaseio.com",
+    projectId: "enotwhynot",
+    storageBucket: "enotwhynot.appspot.com",
+    messagingSenderId: "977756168043"
 };
+
 firebase.initializeApp(firebaseConfig);
 const db = firebase.firestore();
 const settings = {timestampsInSnapshots: true};

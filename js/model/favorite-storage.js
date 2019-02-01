@@ -3,27 +3,27 @@ constructor(){
     this.menu = document.querySelector('nav');
 }
     save(news) {
-        let favoritesNews = JSON.parse(localStorage.getItem('favorites_news')) || [];
-        favoritesNews.push(news);
-        localStorage.setItem('favorites_news', JSON.stringify(favoritesNews));
+        let localSaves = JSON.parse(localStorage.getItem('local_REDPRESS')) || [];
+        localSaves.push(news);
+        localStorage.setItem('local_REDPRESS', JSON.stringify(localSaves));
     }
 
     getAllNews() {
-        return JSON.parse(localStorage.getItem('favorites_news')) || [];
+        return JSON.parse(localStorage.getItem('local_REDPRESS')) || [];
     }
 
-    deliteOnenews(id) {
-        let favoriteNews = JSON.parse(localStorage.getItem('favorites_news'));
-        favoriteNews = favoriteNews.filter(news => news._id !== id);
-        localStorage.setItem('favorites_news', JSON.stringify(favoriteNews));
-    }
+    // deliteOnenews(id) {
+    //     let favoriteNews = JSON.parse(localStorage.getItem('local_REDPRESS'));
+    //     favoriteNews = favoriteNews.filter(news => news._id !== id);
+    //     localStorage.setItem('favorites_news', JSON.stringify(favoriteNews));
+    // }
 
     clear() {
-        localStorage.removeItem('favorites_news');
+        localStorage.removeItem('local_REDPRESS');
     }
 
     cleanAll(){
-        localStorage.clear('favorites_news');
+        localStorage.clear('local_REDPRESS');
     }
 
 }

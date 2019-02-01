@@ -5,6 +5,7 @@ const config = {
 
 let state = {};
 let handle;
+let lastNumberFromBase = {};
 
 let newIPData;
 let lastTimeUpdateBase = '';
@@ -50,9 +51,12 @@ const getNewsFromBase = () => {
             categorysInBase.map( nameOfCategory => {
                 return base.getDBNews(nameOfCategory)
                     .then( item => {
-                        item.forEach(doc => {
+                        item.forEach( doc => {
                             state[nameOfCategory][state[nameOfCategory].length] = doc.data();
                         });
+
+                        // let last=item.docs[item.docs.length-1];
+                        // console.log('last', last);
                     })
                     .catch(err => console.log(err.message));
             })
@@ -60,6 +64,7 @@ const getNewsFromBase = () => {
             .then(() => {
                 ui.clearContainer();
                 console.log('достали из базы все категории по 200 новостей максимум за раз');
+                // console.log(lastNumberFromBase);
             })
             .then(() => {
                 return state['UAgeneral'].map(news => {

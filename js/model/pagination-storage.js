@@ -1,58 +1,48 @@
 class Pagination {
 
     constructor() {
-        this.paginationContainer = document.querySelector('.paginateBox .pagination');
+        this.paginationContainer = document.querySelector('#moveleft');
         this.activePage = document.querySelector('.pagination .active');
         this.disableMarck = document.querySelector('.pagination .disabled');
+        this.moveLeft = document.getElementById('moveleft');
+        this.moveRigth = document.getElementById('moverigth');
     }
 
-    //взять страницу
-    getPage() {
-        //todo написать, функциб по взятию клика произведенного на кнопке со страницами
+    selectPage() {
+        //todo описать функциб по выбранной кнопке
+        //todo взять кнопку и сделать ее активной
     }
 
-    //один шаг
     oneStep() {
         //todo описать функцию по переходу на следующую паритию новостей на один шаг вперед.
     }
 
-    //пять шагов
     fiveStep() {
         //todo описать функцию по переходу на следующую паритию новостей на пять шаго вперед.
     }
 
-    //в начало
     home() {
         //todo описать функцию по переходу в начало (свежие новости)
     }
 
-    //в конец
     last() {
         //todo описать функцию по переходу в конец (чамые старые новости)
     }
 
-    // скрыть пагинацию
     hidePaginatePanel() {
-        //todo описать функцию по скрытию пгинации.
-        this.paginationContainer
+        this.paginationContainer.style.cssText=`display: none;`;
     }
 
-    //показать панель пагинации
-    showPaginatePanel() {
-        const template = `
-        <li class="disabled"><a href="#!"><i class="material-icons">chevron_left</i></a></li>
-            <li class="active"><a href="#!">1</a></li>
-            <li class="waves-effect"><a href="#!">2</a></li>
-            <li class="waves-effect"><a href="#!">3</a></li>
-            <li class="waves-effect"><a href="#!">4</a></li>
-            <li class="waves-effect"><a href="#!">5</a></li>
-        <li class="waves-effect"><a href="#!"><i class="material-icons">chevron_right</i></a></li>
-`;
-        this.paginationContainer.insertAdjacentHTML('afterbegin',template);
+
+    showPaginatePanel(page) {
+        let selected = this.selectPage()?'active':'waves-effect';
+
+        const template = `<li class="${selected}" data-id="${page}"><a href="#!">${page}</a></li>`;
+        this.paginationContainer.insertAdjacentHTML('beforeend',template);
     }
 
-    //запомнить страницу
     rememberPage() {
+        //todo описать функцию которая запоминает страницу посещенную последний раз.
     }
 
 }

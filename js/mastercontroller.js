@@ -21,7 +21,7 @@ const categorys = ['business', 'entertainment', 'general', 'health', 'science', 
 const http = new Fetch();
 const base = new DBFirebase();
 const ip = new Fetch();
-
+const pagination = new Pagination();
 
 const makeName = () => {
     for (let i = 0; i < countrys.length; i++) {
@@ -64,13 +64,9 @@ const getNewsFromBase = () => {
             .then(() => {
                 return state['UAgeneral'].map(news => {
                     ui.addNews(news);
-                }).reduce((secuence, chapterPromis) => {
-                        return secuence
-                            .then(() => {
-                                return chapterPromis;
-                            }).then(chapter => {
-                                return chapter;
-                            });
+                }).reduce((secuence, chapterPromis) => {return secuence
+                            .then(() => {return chapterPromis})
+                            .then(chapter => {return chapter });
                     }, Promise.resolve());
             })
             .catch(err => console.log(err.message));
@@ -183,7 +179,9 @@ runInOrder([getTimeLabel,getNewsFromBase,compareTimeLabel])
 
 handle = setTimeout(go, 10);
 
-
+// [1,2,3,4,5,6,7,8,9,10].forEach(page=>{
+//     pagination.showPaginatePanel(page);
+// });
 
 // const getIPinfo = () => {
 //     ip.get('http://www.geoplugin.net/json.gp')

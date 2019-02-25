@@ -4,8 +4,8 @@ class Pagination {
         this.paginationContainer = document.querySelector('#moveleft');
         this.activePage = document.querySelector('.pagination .active');
         this.disableMarck = document.querySelector('.pagination .disabled');
-        this.moveLeft = document.getElementById('moveleft');
-        this.moveRigth = document.getElementById('moverigth');
+        this.moveLeft = document.getElementById('moveLeft');
+        this.moveRigth = document.getElementById('moveRigth');
     }
 
     selectPage() {

@@ -5,6 +5,7 @@ const config = {
 
 let state = {};
 let handle;
+let lastNumberFromBase = {};
 
 let newIPData;
 let lastTimeUpdateBase = '';
@@ -50,9 +51,11 @@ const getNewsFromBase = () => {
             categorysInBase.map( nameOfCategory => {
                 return base.getDBNews(nameOfCategory)
                     .then( item => {
-                        item.forEach(doc => {
+                        item.forEach( doc => {
                             state[nameOfCategory][state[nameOfCategory].length] = doc.data();
                         });
+
+                        lastNumberFromBase[nameOfCategory]=item.docs[item.docs.length-1];
                     })
                     .catch(err => console.log(err.message));
             })
@@ -60,6 +63,7 @@ const getNewsFromBase = () => {
             .then(() => {
                 ui.clearContainer();
                 console.log('достали из базы все категории по 200 новостей максимум за раз');
+                console.log(lastNumberFromBase);
             })
             .then(() => {
                 return state['UAgeneral'].map(news => {
@@ -138,6 +142,7 @@ const compareTimeLabel = () => {
     if (nowTime - lastTimeUpdateBase.timeStemp > TIMEUPDATE && lastTimeUpdateBase.isGrabe === false){
             runInOrder([changeTimeLabel,grabeApi,go]).then(()=>{
                 console.log('новая метка добавлена, старая метка изменена, Данные обновлены');
+                window.location.reload(true);
             })
                 .catch(err=>console.log(err.message));
     }

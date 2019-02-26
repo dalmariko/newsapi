@@ -65,6 +65,9 @@ const getNewsFromBase = () => {
                 console.log('достали из базы все категории по 200 новостей максимум за раз');
                 console.log(lastNumberFromBase);
             })
+            .then(()=>{
+                ui.clearContainer();
+            })
             .then(() => {
                 return state['UAgeneral'].map(news => {
                     ui.addNews(news);
@@ -142,7 +145,6 @@ const compareTimeLabel = () => {
     if (nowTime - lastTimeUpdateBase.timeStemp > TIMEUPDATE && lastTimeUpdateBase.isGrabe === false){
             runInOrder([changeTimeLabel,grabeApi,go]).then(()=>{
                 console.log('новая метка добавлена, старая метка изменена, Данные обновлены');
-                window.location.reload(true);
             })
                 .catch(err=>console.log(err.message));
     }
@@ -176,7 +178,7 @@ const runInOrder = array=>{
 // Object.keys(state).length!=0?console.log('state не пустой !!!!!!'):getNewsFromBase();
 
 const go=()=>{
-runInOrder([getTimeLabel,getNewsFromBase,compareTimeLabel])
+runInOrder([getTimeLabel,compareTimeLabel,getNewsFromBase])
     .then(()=>{handle = setTimeout(go, TIMEUPDATE);})
     .catch(err=>console.log(err.message));
 };

@@ -54,8 +54,7 @@ const getNewsFromBase = () => {
                         item.forEach( doc => {
                             state[nameOfCategory][state[nameOfCategory].length] = doc.data();
                         });
-
-                        lastNumberFromBase[nameOfCategory]=item.docs[item.docs.length-1];
+                       // lastNumberFromBase[nameOfCategory]=item.docs[item.docs.length-1];
                     })
                     .catch(err => console.log(err.message));
             })
@@ -63,12 +62,7 @@ const getNewsFromBase = () => {
             .then(() => {
                 ui.clearContainer();
                 console.log('достали из базы все категории по 200 новостей максимум за раз');
-                console.log(lastNumberFromBase);
-            })
-            .then(()=>{
-                ui.clearContainer();
-            })
-            .then(() => {
+
                 return state['UAgeneral'].map(news => {
                     ui.addNews(news);
                 }).reduce((secuence, chapterPromis) => {return secuence
@@ -143,7 +137,7 @@ const compareTimeLabel = () => {
     let nowTime = Date.now();
 
     if (nowTime - lastTimeUpdateBase.timeStemp > TIMEUPDATE && lastTimeUpdateBase.isGrabe === false){
-            runInOrder([changeTimeLabel,grabeApi,go]).then(()=>{
+           return runInOrder([changeTimeLabel,grabeApi,getNewsFromBase]).then(()=>{
                 console.log('новая метка добавлена, старая метка изменена, Данные обновлены');
             })
                 .catch(err=>console.log(err.message));
@@ -164,6 +158,7 @@ const compareTimeLabel = () => {
         let lng = navigator.browserLanguage || navigator.language || navigator.userLanguage;
         console.log(`Обновление Базы новостей поризойдет: - "${date.toLocaleString(`${lng}`, options)}", пока проверяем локально.`);
 
+        return;
 };
 
 const runInOrder = array=>{
@@ -178,7 +173,7 @@ const runInOrder = array=>{
 // Object.keys(state).length!=0?console.log('state не пустой !!!!!!'):getNewsFromBase();
 
 const go=()=>{
-runInOrder([getTimeLabel,compareTimeLabel,getNewsFromBase])
+return runInOrder([getTimeLabel,compareTimeLabel,getNewsFromBase])
     .then(()=>{handle = setTimeout(go, TIMEUPDATE);})
     .catch(err=>console.log(err.message));
 };

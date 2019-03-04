@@ -132,6 +132,14 @@ const changeTimeLabel =() =>{
     base.setTimeLebel(lastTimeUpdateBase.dateId, {isGrabe: true, timeStemp: lastTimeUpdateBase.timeStemp + ''});
 };
 
+const runInOrder = array=>{
+    return array.reduce((ferst,next)=> {
+        return ferst.then(() => {
+            return next()
+        });
+    },Promise.resolve());
+};
+
 const compareTimeLabel = () => {
 
     let nowTime = Date.now();
@@ -141,39 +149,35 @@ const compareTimeLabel = () => {
                 console.log('новая метка добавлена, старая метка изменена, Данные обновлены');
             })
                 .catch(err=>console.log(err.message));
+    }else{
+        return runInOrder([getNewsFromBase]).then(()=>{
+            let date = new Date(lastTimeUpdateBase.timeStemp + TIMEUPDATE);
+            let options = {
+                era: 'short',
+                year: 'numeric',
+                month: 'short',
+                day: 'numeric',
+                weekday: 'long',
+                timezone: 'short',
+                hour: 'numeric',
+                minute: 'numeric',
+                second: 'numeric'
+            };
+            let lng = navigator.browserLanguage || navigator.language || navigator.userLanguage;
+            console.log(`Обновление Базы новостей поризойдет: - "${date.toLocaleString(`${lng}`, options)}", пока проверяем локально.`);
+        })
+            .catch(err=>console.log(err.message));
     }
 
-        let date = new Date(lastTimeUpdateBase.timeStemp + TIMEUPDATE);
-        let options = {
-            era: 'short',
-            year: 'numeric',
-            month: 'short',
-            day: 'numeric',
-            weekday: 'long',
-            timezone: 'short',
-            hour: 'numeric',
-            minute: 'numeric',
-            second: 'numeric'
-        };
-        let lng = navigator.browserLanguage || navigator.language || navigator.userLanguage;
-        console.log(`Обновление Базы новостей поризойдет: - "${date.toLocaleString(`${lng}`, options)}", пока проверяем локально.`);
-
-        return;
 };
 
-const runInOrder = array=>{
-    return array.reduce((ferst,next)=> {
-        return ferst.then(() => {
-            return next()
-        });
-    },Promise.resolve());
- };
+
 
 
 // Object.keys(state).length!=0?console.log('state не пустой !!!!!!'):getNewsFromBase();
 
 const go=()=>{
-return runInOrder([getTimeLabel,compareTimeLabel,getNewsFromBase])
+return runInOrder([getTimeLabel,compareTimeLabel])
     .then(()=>{handle = setTimeout(go, TIMEUPDATE);})
     .catch(err=>console.log(err.message));
 };
